@@ -19,7 +19,7 @@
     </SupportedCultures>
     <XapOutputs>true</XapOutputs>
     <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
-    <XapFilename>Photo_Inspector_x_x_x_x_WP8.xap</XapFilename>
+    <XapFilename>PhotoInspector_$(Configuration)_$(Platform).xap</XapFilename>
     <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
     <SilverlightAppEntry>MagnifierApp.App</SilverlightAppEntry>
     <ValidateXaml>true</ValidateXaml>
