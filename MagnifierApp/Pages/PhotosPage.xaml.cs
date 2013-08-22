@@ -90,6 +90,8 @@ namespace MagnifierApp.Pages
             }
             else
             {
+                Microsoft.Devices.CameraButtons.ShutterKeyPressed += CameraButtons_ShutterKeyPressed;
+
                 _viewModel = new PhotosPageViewModel();
                 _viewModel.Photos.CollectionChanged += Photos_CollectionChanged;
 
@@ -103,6 +105,8 @@ namespace MagnifierApp.Pages
         {
             base.OnNavigatedFrom(e);
 
+            Microsoft.Devices.CameraButtons.ShutterKeyPressed -= CameraButtons_ShutterKeyPressed;
+
             DataContext = null;
 
             if (_viewModel != null)
@@ -110,6 +114,11 @@ namespace MagnifierApp.Pages
                 _viewModel.Photos.CollectionChanged -= Photos_CollectionChanged;
                 _viewModel = null;
             }
+        }
+
+        private void CameraButtons_ShutterKeyPressed(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Pages/ViewfinderPage.xaml", UriKind.Relative));
         }
 
         private void Photos_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

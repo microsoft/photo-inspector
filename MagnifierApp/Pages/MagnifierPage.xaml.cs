@@ -138,8 +138,6 @@ namespace MagnifierApp
         {
             base.OnNavigatedTo(e);
 
-            Microsoft.Devices.CameraButtons.ShutterKeyPressed += CameraButtons_ShutterKeyPressed;
-
             var queryString = this.NavigationContext.QueryString;
 
             if (PhotoModel.Singleton.Image == null)
@@ -175,8 +173,6 @@ namespace MagnifierApp
         protected override void OnNavigatedFrom(System.Windows.Navigation.NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
-
-            Microsoft.Devices.CameraButtons.ShutterKeyPressed -= CameraButtons_ShutterKeyPressed;
 
             EndSession();
 
@@ -299,11 +295,6 @@ namespace MagnifierApp
             HighResolutionCropImage.Visibility = Visibility.Collapsed;
             Lense.Visibility = Visibility.Collapsed;
             InformationPanel.Visibility = Visibility.Visible;
-        }
-
-        private void CameraButtons_ShutterKeyPressed(object sender, EventArgs e)
-        {
-            NavigationService.GoBack();
         }
 
         private void PickPhotoButton_Click(object sender, EventArgs e)

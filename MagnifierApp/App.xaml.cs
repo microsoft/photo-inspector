@@ -73,6 +73,8 @@ namespace MagnifierApp
         // This code will not execute when the application is reactivated
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
+            Microsoft.Devices.CameraButtons.ShutterKeyPressed += CameraButtons_ShutterKeyPressed;
+
             PhotoModel.Singleton.CleanLocals();
         }
 
@@ -80,6 +82,8 @@ namespace MagnifierApp
         // This code will not execute when the application is first launched
         private void Application_Activated(object sender, ActivatedEventArgs e)
         {
+            Microsoft.Devices.CameraButtons.ShutterKeyPressed += CameraButtons_ShutterKeyPressed;
+
             PhotoModel.Singleton.CleanLocals();
 
             if (!e.IsApplicationInstancePreserved)
@@ -92,6 +96,8 @@ namespace MagnifierApp
         // This code will not execute when the application is closing
         private void Application_Deactivated(object sender, DeactivatedEventArgs e)
         {
+            Microsoft.Devices.CameraButtons.ShutterKeyPressed -= CameraButtons_ShutterKeyPressed;
+
             PhotoModel.Singleton.Tombstone();
         }
 
@@ -99,7 +105,14 @@ namespace MagnifierApp
         // This code will not execute when the application is deactivated
         private void Application_Closing(object sender, ClosingEventArgs e)
         {
+            Microsoft.Devices.CameraButtons.ShutterKeyPressed -= CameraButtons_ShutterKeyPressed;
+
             PhotoModel.Singleton.Tombstone();
+        }
+
+        private void CameraButtons_ShutterKeyPressed(object sender, EventArgs e)
+        {
+            // Nothing, just prevent camera press from launching the platform camera
         }
 
         // Code to execute if a navigation fails
