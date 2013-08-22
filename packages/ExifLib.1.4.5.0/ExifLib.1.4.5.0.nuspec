@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>ExifLib</id>
+    <version>1.4.5.0</version>
+    <title>ExifLib - A Fast Exif Data Extractor for .NET 2.0+</title>
+    <authors>Simon McKenzie</authors>
+    <owners>Simon McKenzie</owners>
+    <projectUrl>http://www.codeproject.com/KB/graphics/exiflib.aspx</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Reads JPEG Exif data without the heavyweight and unnecessary instantiation of GDI+ objects</description>
+    <releaseNotes>Fix for Windows Phone 8</releaseNotes>
+    <copyright>Licensed under the CPOL</copyright>
+    <language />
+    <tags>jpeg exif jpg</tags>
+  </metadata>
+</package>

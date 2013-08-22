@@ -242,4 +242,50 @@ Notice that if you delete the corresponding low resolution copies from Photos ap
   <data name="AboutPage_GuideRunLowResolution_Text" xml:space="preserve">
     <value>Capture a photo and slide your finger on the preview to bring up a loupe to zoom right into pixel perfect details in the photo. Save a the photo to the main Photos gallery and share photos to online services like Facebook and Twitter.</value>
   </data>
+  <data name="InfoPage_GuideTextBlock_Text" xml:space="preserve">
+    <value>This photo does not seem to have any additional information.</value>
+  </data>
+  <data name="InfoPage_Title_Text" xml:space="preserve">
+    <value>photo info</value>
+  </data>
+  <data name="MagnifierPage_InfoButton_Text" xml:space="preserve">
+    <value>info</value>
+  </data>
+  <data name="InfoPage_ApertureTitleTextBlock_Text" xml:space="preserve">
+    <value>Aperture</value>
+  </data>
+  <data name="InfoPage_DateTimeTitleTextBlock_Text" xml:space="preserve">
+    <value>Date and time</value>
+  </data>
+  <data name="InfoPage_DimensionsTitleTextBlock_Text" xml:space="preserve">
+    <value>Dimensions</value>
+  </data>
+  <data name="InfoPage_ExposureTimeTitleTextBlock_Text" xml:space="preserve">
+    <value>Exposure time</value>
+  </data>
+  <data name="InfoPage_ExposureTimeValueFormatTextBlock_Text" xml:space="preserve">
+    <value>{0} seconds</value>
+    <comment>{0} is the length of exposure time in seconds with couple of decimals.</comment>
+  </data>
+  <data name="InfoPage_FlashTitleTextBlock_Text" xml:space="preserve">
+    <value>Flash</value>
+  </data>
+  <data name="InfoPage_FlashValueFiredTextBlock_Text" xml:space="preserve">
+    <value>Flash did fire</value>
+  </data>
+  <data name="InfoPage_FlashValueNotFiredTextBlock_Text" xml:space="preserve">
+    <value>Flash did not fire</value>
+  </data>
+  <data name="InfoPage_IsoTitleTextBlock_Text" xml:space="preserve">
+    <value>ISO</value>
+  </data>
+  <data name="InfoPage_MakeTitleTextBlock_Text" xml:space="preserve">
+    <value>Make</value>
+  </data>
+  <data name="InfoPage_ModelTitleTextBlock_Text" xml:space="preserve">
+    <value>Model</value>
+  </data>
+  <data name="InfoPage_SoftwareTitleTextBlock_Text" xml:space="preserve">
+    <value>Software</value>
+  </data>
 </root>

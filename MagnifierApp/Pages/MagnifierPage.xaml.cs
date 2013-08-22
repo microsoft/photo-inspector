@@ -85,6 +85,18 @@ namespace MagnifierApp
 
             ApplicationBar.Buttons.Add(shareButton);
 
+            // Info button
+
+            var infoButton = new ApplicationBarIconButton()
+            {
+                IconUri = new Uri("/Assets/Icons/info.png", UriKind.Relative),
+                Text = AppResources.MagnifierPage_InfoButton_Text
+            };
+
+            infoButton.Click += InfoButton_Click;
+
+            ApplicationBar.Buttons.Add(infoButton);
+
             // About menu item
 
             var aboutMenuItem = new ApplicationBarMenuItem()
@@ -355,6 +367,11 @@ namespace MagnifierApp
                 _shareMediaTask.FilePath = PhotoModel.Singleton.LibraryPath;
                 _shareMediaTask.Show();
             }
+        }
+
+        private void InfoButton_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Pages/InfoPage.xaml", UriKind.Relative));
         }
 
         private void AboutMenuItem_Click(object sender, EventArgs e)
