@@ -85,8 +85,6 @@ namespace MagnifierApp.Pages
 
         private void CropButton_Click(object sender, EventArgs e)
         {
-            /// todo crop and save(?)
-
             GeneralTransform transform = Crop.TransformToVisual(Image);
 
             var topLeftWindowsPoint = transform.Transform(new Point(0, 0));
