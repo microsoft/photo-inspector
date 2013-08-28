@@ -70,20 +70,11 @@ namespace MagnifierApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Capture a photo and slide your finger on the preview to bring up a loupe to zoom right into pixel perfect details in the photo. Save a lower resolution copy of the photo to the main Photos gallery while retaining the original maximum resolution photo in application local storage for later use. Share photos as lower resolution copies to online services like Facebook and Twitter..
+        ///   Looks up a localized string similar to Capture a photo and slide your finger on the preview to bring up a loupe to zoom right into pixel perfect details in the photo. Crop rectangular areas from photos and save lower resolution copies to the main Photos gallery while retaining the original maximum resolution photos in application local storage for later use - for example for reframing the crop! Share photos as lower resolution copies to online services like Facebook and Twitter..
         /// </summary>
-        public static string AboutPage_GuideRunHighResolution_Text {
+        public static string AboutPage_GuideRun_Text {
             get {
-                return ResourceManager.GetString("AboutPage_GuideRunHighResolution_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Capture a photo and slide your finger on the preview to bring up a loupe to zoom right into pixel perfect details in the photo. Save a the photo to the main Photos gallery and share photos to online services like Facebook and Twitter..
-        /// </summary>
-        public static string AboutPage_GuideRunLowResolution_Text {
-            get {
-                return ResourceManager.GetString("AboutPage_GuideRunLowResolution_Text", resourceCulture);
+                return ResourceManager.GetString("AboutPage_GuideRun_Text", resourceCulture);
             }
         }
         
@@ -484,11 +475,11 @@ namespace MagnifierApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No high resolution photos in local storage.
+        ///   Looks up a localized string similar to No photos in application local storage.
         ///
-        ///High resolution photos that you capture with this application are displayed here. To access other existing photos tap the gallery button, or go capturing new photos by tapping the camera button.
+        ///High resolution photos too large for the Photos library and cropped photos that have a locally saved original for later reframing purposes are displayed here. To access other photos tap the gallery button, or go capturing new photos by tapping the camera button.
         ///
-        ///Notice that if you delete the corresponding low resolution copies from Photos application&apos;s Camera Roll, the high resolution originals in this application will also be deleted automatically (when the Photo Inspector is opened)..
+        ///Notice that if you delete the corresponding photo copies from the Photos application&apos;s Camera Roll, the corresponding locally saved photos in this application will also be deleted automatically when the  [rest of string was truncated]&quot;;.
         /// </summary>
         public static string PhotosPage_GuideTextBlock_Text {
             get {

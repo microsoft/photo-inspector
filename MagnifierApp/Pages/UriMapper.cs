@@ -34,10 +34,6 @@ namespace MagnifierApp.Pages
             {
                 return new Uri(tempUri.Replace("PhotosPage", "ViewfinderPage"), UriKind.Relative);
             }
-            else if (tempUri.Contains("PhotosPage") && !Information.HighResolutionCaptureSupported)
-            {
-                return new Uri(tempUri.Replace("PhotosPage", "ViewfinderPage"), UriKind.Relative);
-            }
 
             return uri;
         }

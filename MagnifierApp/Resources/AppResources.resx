@@ -199,8 +199,8 @@
   <data name="ViewFinderPage_AboutMenuItem_Text" xml:space="preserve">
     <value>about</value>
   </data>
-  <data name="AboutPage_GuideRunHighResolution_Text" xml:space="preserve">
-    <value>Capture a photo and slide your finger on the preview to bring up a loupe to zoom right into pixel perfect details in the photo. Save a lower resolution copy of the photo to the main Photos gallery while retaining the original maximum resolution photo in application local storage for later use. Share photos as lower resolution copies to online services like Facebook and Twitter.</value>
+  <data name="AboutPage_GuideRun_Text" xml:space="preserve">
+    <value>Capture a photo and slide your finger on the preview to bring up a loupe to zoom right into pixel perfect details in the photo. Crop rectangular areas from photos and save lower resolution copies to the main Photos gallery while retaining the original maximum resolution photos in application local storage for later use - for example for reframing the crop! Share photos as lower resolution copies to online services like Facebook and Twitter.</value>
   </data>
   <data name="AboutPage_LegalRun_Text" xml:space="preserve">
     <value>Developed and published by Nokia. All rights reserved.</value>
@@ -218,11 +218,11 @@
     <value>delete</value>
   </data>
   <data name="PhotosPage_GuideTextBlock_Text" xml:space="preserve">
-    <value>No high resolution photos in local storage.
+    <value>No photos in application local storage.
 
-High resolution photos that you capture with this application are displayed here. To access other existing photos tap the gallery button, or go capturing new photos by tapping the camera button.
+High resolution photos too large for the Photos library and cropped photos that have a locally saved original for later reframing purposes are displayed here. To access other photos tap the gallery button, or go capturing new photos by tapping the camera button.
 
-Notice that if you delete the corresponding low resolution copies from Photos application's Camera Roll, the high resolution originals in this application will also be deleted automatically (when the Photo Inspector is opened).</value>
+Notice that if you delete the corresponding photo copies from the Photos application's Camera Roll, the corresponding locally saved photos in this application will also be deleted automatically when the Photo Inspector is next time opened.</value>
   </data>
   <data name="PhotosPage_ShareMenuItem_Text" xml:space="preserve">
     <value>share...</value>
@@ -238,9 +238,6 @@ Notice that if you delete the corresponding low resolution copies from Photos ap
   </data>
   <data name="PhotosPage_DeleteAllMessageBox_Text" xml:space="preserve">
     <value>Delete all high resolution photos saved in Photo Inspector's local storage?</value>
-  </data>
-  <data name="AboutPage_GuideRunLowResolution_Text" xml:space="preserve">
-    <value>Capture a photo and slide your finger on the preview to bring up a loupe to zoom right into pixel perfect details in the photo. Save a the photo to the main Photos gallery and share photos to online services like Facebook and Twitter.</value>
   </data>
   <data name="InfoPage_GuideTextBlock_Text" xml:space="preserve">
     <value>This photo does not seem to have any additional information.</value>
