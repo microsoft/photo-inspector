@@ -11,12 +11,14 @@ using MagnifierApp.Resources;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using Microsoft.Xna.Framework.Media.PhoneExtensions;
 
 namespace MagnifierApp.Pages
 {
@@ -38,7 +40,7 @@ namespace MagnifierApp.Pages
             var pickPhotoButton = new ApplicationBarIconButton()
             {
                 IconUri = new Uri("/Assets/Icons/folder.png", UriKind.Relative),
-                Text = AppResources.ViewfinderPage_PickPhotoButton_Text
+                Text = AppResources.ViewfinderPage_GalleryButton_Text
             };
 
             pickPhotoButton.Click += PickPhotoButton_Click;
@@ -180,8 +182,8 @@ namespace MagnifierApp.Pages
                 }
                 else
                 {
-                    var result = MessageBox.Show(AppResources.ViewfinderPage_PickPhotoReadErrorMessageBox_Text,
-                        AppResources.ViewfinderPage_PickPhotoReadErrorMessageBox_Caption, MessageBoxButton.OKCancel);
+                    var result = MessageBox.Show(AppResources.ViewfinderPage_GalleryReadErrorMessageBox_Text,
+                        AppResources.ViewfinderPage_GalleryReadErrorMessageBox_Caption, MessageBoxButton.OKCancel);
 
                     if (result.HasFlag(MessageBoxResult.OK))
                     {
@@ -201,13 +203,23 @@ namespace MagnifierApp.Pages
 
             System.Diagnostics.Debug.Assert(photo != null);
 
-            using (var store = IsolatedStorageFile.GetUserStoreForApplication())
+            using (var library = new MediaLibrary())
             {
-                var file = store.OpenFile(photo.LocalPath, FileMode.Open);
+                using (var pictures = library.Pictures)
+                {
+                    for (int i = 0; i < pictures.Count; i++)
+                    {
+                        using (var picture = pictures[i])
+                        {
+                            if (picture.GetPath() == photo.LibraryPath)
+                            {
+                                PhotoModel.Singleton.FromLibraryImage(photo.LibraryPath, picture.GetImage());
 
-                PhotoModel.Singleton.FromLocalImage(photo.LocalPath, file);
-
-                NavigationService.Navigate(new Uri("/Pages/MagnifierPage.xaml", UriKind.Relative));
+                                NavigationService.Navigate(new Uri("/Pages/MagnifierPage.xaml", UriKind.Relative));
+                            }
+                        }
+                    }
+                }
             }
         }
 

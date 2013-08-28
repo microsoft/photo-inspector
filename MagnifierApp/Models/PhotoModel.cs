@@ -25,16 +25,20 @@ namespace MagnifierApp.Models
         #region Members
 
         private const string TOMBSTONING_PATH = @"\Tombstoning\PhotoModel";
-        private const string TOMBSTONING_IMAGE_FILENAME = @"image.jpeg";
+        private const string TOMBSTONING_IMAGE_FILENAME = @"image.jpg";
+        private const string TOMBSTONING_ORIGINAL_FILENAME = @"original.jpg";
         private const string TOMBSTONING_LIBRARYPATH_KEY = "PhotoModel.LibraryPath";
         private const string TOMBSTONING_LOCALPATH_KEY = "PhotoModel.LocalPath";
         private const string LOCALS_PATH = @"\LocalImages";
+        private const string ORIGINALS_PATH = @"\OriginalImages";
 
         private static PhotoModel _instance = null;
 
         private Stream _image = null;
+        private Stream _original = null;
         private string _libraryPath = null;
         private string _localPath = null;
+        private string _originalPath = null;
         private Size _imageSize = new Size(0, 0);
 
         #endregion Members
@@ -44,8 +48,10 @@ namespace MagnifierApp.Models
         public event PropertyChangedEventHandler PropertyChanged;
 
         public const string ImagePropertyName = "Image";
+        public const string OriginalPropertyName = "Original";
         public const string LibraryPathPropertyName = "LibraryPath";
         public const string LocalPathPropertyName = "LocalPath";
+        public const string OriginalPathPropertyName = "OriginalPath";
 
         #endregion
 
@@ -106,6 +112,36 @@ namespace MagnifierApp.Models
             }
         }
 
+        public Stream Original
+        {
+            get
+            {
+                return _original;
+            }
+
+            private set
+            {
+                if (_original != value)
+                {
+                    if (_original != null)
+                    {
+                        _original.Close();
+                    }
+
+                    _original = value;
+
+                    if (PropertyChanged != null)
+                    {
+                        PropertyChanged(this, new PropertyChangedEventArgs(OriginalPropertyName));
+                    }
+                }
+                else if (value != null)
+                {
+                    value.Close();
+                }
+            }
+        }
+
         public string LibraryPath
         {
             get
@@ -119,7 +155,7 @@ namespace MagnifierApp.Models
                 {
                     _libraryPath = value;
 
-                    System.Diagnostics.Debug.WriteLine("PhotoModel.LibraryPath is \"" + LibraryPath + "\"");
+                    System.Diagnostics.Debug.WriteLine("PhotoModel.LibraryPath is \"" + _libraryPath + "\"");
 
                     if (PropertyChanged != null)
                     {
@@ -142,11 +178,34 @@ namespace MagnifierApp.Models
                 {
                     _localPath = value;
 
-                    System.Diagnostics.Debug.WriteLine("PhotoModel.LocalPath is \"" + LocalPath + "\"");
+                    System.Diagnostics.Debug.WriteLine("PhotoModel.LocalPath is \"" + _localPath + "\"");
 
                     if (PropertyChanged != null)
                     {
                         PropertyChanged(this, new PropertyChangedEventArgs(LocalPathPropertyName));
+                    }
+                }
+            }
+        }
+
+        public string OriginalPath
+        {
+            get
+            {
+                return _originalPath;
+            }
+
+            private set
+            {
+                if (_originalPath != value)
+                {
+                    _originalPath = value;
+
+                    System.Diagnostics.Debug.WriteLine("PhotoModel.OriginalPath is \"" + _originalPath + "\"");
+
+                    if (PropertyChanged != null)
+                    {
+                        PropertyChanged(this, new PropertyChangedEventArgs(OriginalPathPropertyName));
                     }
                 }
             }
@@ -161,6 +220,11 @@ namespace MagnifierApp.Models
             if (_image != null)
             {
                 _image.Close();
+            }
+
+            if (_original != null)
+            {
+                _original.Close();
             }
         }
 
@@ -190,6 +254,16 @@ namespace MagnifierApp.Models
                 else
                 {
                     Image = image;
+                }
+
+                OriginalPath = MatchPathWithOriginalPath(libraryPath);
+
+                if (OriginalPath != null)
+                {
+                    using (var store = IsolatedStorageFile.GetUserStoreForApplication())
+                    {
+                        Original = store.OpenFile(OriginalPath, FileMode.Open);
+                    }
                 }
             }
             else
@@ -224,6 +298,16 @@ namespace MagnifierApp.Models
                         {
                             Image = picture.GetImage();
                         }
+
+                        OriginalPath = MatchPathWithOriginalPath(libraryPath);
+
+                        if (OriginalPath != null)
+                        {
+                            using (var store = IsolatedStorageFile.GetUserStoreForApplication())
+                            {
+                                Original = store.OpenFile(OriginalPath, FileMode.Open);
+                            }
+                        }
                     }
                 }
             }
@@ -239,6 +323,16 @@ namespace MagnifierApp.Models
                 LibraryPath = MatchLocalPathWithLibraryPath(localPath);
                 LocalPath = localPath;
                 Image = image;
+
+                OriginalPath = MatchPathWithOriginalPath(localPath);
+
+                if (OriginalPath != null)
+                {
+                    using (var store = IsolatedStorageFile.GetUserStoreForApplication())
+                    {
+                        Original = store.OpenFile(OriginalPath, FileMode.Open);
+                    }
+                }
             }
             else
             {
@@ -251,6 +345,27 @@ namespace MagnifierApp.Models
             System.Diagnostics.Debug.Assert(image != null);
 
             Image = image;
+            Original = null;
+            LibraryPath = null;
+            LocalPath = null;
+            OriginalPath = null;
+        }
+
+        public void FromNewCrop(Stream image)
+        {
+            System.Diagnostics.Debug.Assert(image != null);
+
+            if (Original == null && _image != null)
+            {
+                var original = new MemoryStream();
+
+                _image.Position = 0;
+                _image.CopyTo(original);
+
+                Original = original;
+            }
+
+            Image = image;
             LibraryPath = null;
             LocalPath = null;
         }
@@ -258,8 +373,10 @@ namespace MagnifierApp.Models
         public void Clear()
         {
             Image = null;
+            Original = null;
             LibraryPath = null;
             LocalPath = null;
+            OriginalPath = null;
             Singleton = null;
         }
 
@@ -291,7 +408,43 @@ namespace MagnifierApp.Models
                     }
                 }
 
-                var filenameBase = "photoinspector_" + DateTime.UtcNow.Ticks.ToString();
+                var filenameBase = "photoinspector";
+
+                if (_original != null)
+                {
+                    if (_originalPath != null)
+                    {
+                        var originalPathParts = _originalPath.Split(new char[] { '_', '.' }, StringSplitOptions.RemoveEmptyEntries);
+
+                        filenameBase += '_' + originalPathParts[1];
+                    }
+                    else
+                    {
+                        filenameBase += '_' + DateTime.UtcNow.Ticks.ToString();
+
+                        using (var store = IsolatedStorageFile.GetUserStoreForApplication())
+                        {
+                            if (!store.DirectoryExists(ORIGINALS_PATH))
+                            {
+                                store.CreateDirectory(ORIGINALS_PATH);
+                            }
+
+                            var originalPath = ORIGINALS_PATH + @"\" + filenameBase + @".jpg";
+
+                            using (var file = store.CreateFile(originalPath))
+                            {
+                                _original.Position = 0;
+                                _original.CopyTo(file);
+
+                                file.Flush();
+
+                                OriginalPath = originalPath;
+                            }
+                        }
+                    }
+                }
+
+                filenameBase += '_' + DateTime.UtcNow.Ticks.ToString();
 
                 if (resizeConfiguration != null)
                 {
@@ -346,19 +499,19 @@ namespace MagnifierApp.Models
         /// If a match is not found (photo has been deleted from the MediaLibrary) this routine deletes
         /// also the locally saved photo.
         /// </summary>
-        public void CleanLocals()
+        public void CleanLocalStorage()
         {
             using (var store = IsolatedStorageFile.GetUserStoreForApplication())
             {
                 if (store.DirectoryExists(LOCALS_PATH))
                 {
-                    var array = store.GetFileNames(LOCALS_PATH + @"\*");
+                    var localsArray = store.GetFileNames(LOCALS_PATH + @"\*");
 
                     using (var library = new MediaLibrary())
                     {
                         using (var pictures = library.Pictures)
                         {
-                            foreach (var localFilename in array)
+                            foreach (var localFilename in localsArray)
                             {
                                 var found = false;
 
@@ -381,7 +534,7 @@ namespace MagnifierApp.Models
 
                                     store.DeleteFile(localPath);
 
-                                    System.Diagnostics.Debug.WriteLine("PhotoModel.CleanLocals deleted local \"" + localPath + "\"");
+                                    System.Diagnostics.Debug.WriteLine("PhotoModel.CleanLocalStorage deleted local \"" + localPath + "\"");
 
                                     if (LocalPath == localPath)
                                     {
@@ -390,6 +543,50 @@ namespace MagnifierApp.Models
                                         LibraryPath = null;
                                         LocalPath = null;
                                     }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (store.DirectoryExists(ORIGINALS_PATH))
+                {
+                    var originalsArray = store.GetFileNames(ORIGINALS_PATH + @"\*");
+
+                    using (var library = new MediaLibrary())
+                    {
+                        using (var pictures = library.Pictures)
+                        {
+                            foreach (var originalFilename in originalsArray)
+                            {
+                                var found = false;
+
+                                for (int i = 0; i < pictures.Count && !found; i++)
+                                {
+                                    using (var picture = pictures[i])
+                                    {
+                                        var libraryFilename = FilenameFromPath(picture.GetPath());
+                                        var libraryFilenameParts = libraryFilename.Split(new char[] { '_' }, StringSplitOptions.RemoveEmptyEntries);
+
+                                        if (libraryFilenameParts.Length == 3 && libraryFilenameParts[0] == @"photoinspector")
+                                        {
+                                            libraryFilename = libraryFilenameParts[0] + '_' + libraryFilenameParts[1] + @".jpg";
+                                        }
+
+                                        if (originalFilename == libraryFilename)
+                                        {
+                                            found = true;
+                                        }
+                                    }
+                                }
+
+                                if (!found)
+                                {
+                                    var originalPath = ORIGINALS_PATH + @"\" + originalFilename;
+
+                                    store.DeleteFile(originalPath);
+
+                                    System.Diagnostics.Debug.WriteLine("PhotoModel.CleanLocalStorage deleted original \"" + originalPath + "\"");
                                 }
                             }
                         }
@@ -411,16 +608,34 @@ namespace MagnifierApp.Models
                     store.CreateDirectory(TOMBSTONING_PATH);
                 }
 
-                var path = TOMBSTONING_PATH + @"\" + TOMBSTONING_IMAGE_FILENAME;
+                var originalPath = TOMBSTONING_PATH + @"\" + TOMBSTONING_ORIGINAL_FILENAME;
 
-                if (store.FileExists(path))
+                if (store.FileExists(originalPath))
                 {
-                    store.DeleteFile(path);
+                    store.DeleteFile(originalPath);
+                }
+
+                if (_original != null && _original.Length > 0)
+                {
+                    using (var file = store.CreateFile(originalPath))
+                    {
+                        _original.Position = 0;
+                        _original.CopyTo(file);
+
+                        file.Flush();
+                    }
+                }
+
+                var imagePath = TOMBSTONING_PATH + @"\" + TOMBSTONING_IMAGE_FILENAME;
+
+                if (store.FileExists(imagePath))
+                {
+                    store.DeleteFile(imagePath);
                 }
 
                 if (_image != null && _image.Length > 0)
                 {
-                    using (var file = store.CreateFile(path))
+                    using (var file = store.CreateFile(imagePath))
                     {
                         _image.Position = 0;
                         _image.CopyTo(file);
@@ -445,11 +660,35 @@ namespace MagnifierApp.Models
         {
             using (var store = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                var path = TOMBSTONING_PATH + @"\" + TOMBSTONING_IMAGE_FILENAME;
+                var originalPath = TOMBSTONING_PATH + @"\" + TOMBSTONING_ORIGINAL_FILENAME;
 
-                if (store.FileExists(path))
+                if (store.FileExists(originalPath))
                 {
-                    using (var file = store.OpenFile(path, FileMode.Open, FileAccess.Read))
+                    using (var file = store.OpenFile(originalPath, FileMode.Open, FileAccess.Read))
+                    {
+                        var stream = new MemoryStream();
+
+                        try
+                        {
+                            file.CopyTo(stream);
+                            file.Flush();
+
+                            Original = stream;
+                        }
+                        catch (Exception ex)
+                        {
+                            stream.Close();
+                        }
+                    }
+
+                    store.DeleteFile(originalPath);
+                }
+
+                var imagePath = TOMBSTONING_PATH + @"\" + TOMBSTONING_IMAGE_FILENAME;
+
+                if (store.FileExists(imagePath))
+                {
+                    using (var file = store.OpenFile(imagePath, FileMode.Open, FileAccess.Read))
                     {
                         var stream = new MemoryStream();
 
@@ -466,7 +705,7 @@ namespace MagnifierApp.Models
                         }
                     }
 
-                    store.DeleteFile(path);
+                    store.DeleteFile(imagePath);
 
                     if (IsolatedStorageSettings.ApplicationSettings.Contains(TOMBSTONING_LIBRARYPATH_KEY))
                     {
@@ -545,6 +784,29 @@ namespace MagnifierApp.Models
             }
 
             return null;
+        }
+
+        private string MatchPathWithOriginalPath(string path)
+        {
+            var originalFilename = FilenameFromPath(path);
+            var originalFilenameParts = originalFilename.Split(new char[] { '_' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (originalFilenameParts.Length == 3 && originalFilenameParts[0] == @"photoinspector")
+            {
+                originalFilename = originalFilenameParts[0] + '_' + originalFilenameParts[1] + @".jpg";
+            }
+
+            var originalPathCandidate = ORIGINALS_PATH + '\\' + originalFilename;
+
+            using (var store = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                if (!store.FileExists(originalPathCandidate))
+                {
+                    return null;
+                }
+            }
+
+            return originalPathCandidate;
         }
 
         private IBuffer StreamToBuffer(Stream stream)

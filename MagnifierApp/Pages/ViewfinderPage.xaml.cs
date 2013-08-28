@@ -51,7 +51,7 @@ namespace MagnifierApp.Pages
             var pickPhotoButton = new ApplicationBarIconButton()
             {
                 IconUri = new Uri("/Assets/Icons/folder.png", UriKind.Relative),
-                Text = AppResources.ViewfinderPage_PickPhotoButton_Text
+                Text = AppResources.ViewfinderPage_GalleryButton_Text
             };
 
             pickPhotoButton.Click += PickPhotoButton_Click;
@@ -182,8 +182,8 @@ namespace MagnifierApp.Pages
                 }
                 else
                 {
-                    var result = MessageBox.Show(AppResources.ViewfinderPage_PickPhotoReadErrorMessageBox_Text,
-                        AppResources.ViewfinderPage_PickPhotoReadErrorMessageBox_Caption, MessageBoxButton.OKCancel);
+                    var result = MessageBox.Show(AppResources.ViewfinderPage_GalleryReadErrorMessageBox_Text,
+                        AppResources.ViewfinderPage_GalleryReadErrorMessageBox_Caption, MessageBoxButton.OKCancel);
 
                     if (result.HasFlag(MessageBoxResult.OK))
                     {

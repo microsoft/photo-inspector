@@ -142,6 +142,15 @@ namespace MagnifierApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to crop.
+        /// </summary>
+        public static string CropPage_AcceptButton_Text {
+            get {
+                return ResourceManager.GetString("CropPage_AcceptButton_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Aperture.
         /// </summary>
         public static string InfoPage_ApertureTitleTextBlock_Text {
@@ -151,7 +160,7 @@ namespace MagnifierApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Date and time.
+        ///   Looks up a localized string similar to Original date and time.
         /// </summary>
         public static string InfoPage_DateTimeTitleTextBlock_Text {
             get {
@@ -160,7 +169,7 @@ namespace MagnifierApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dimensions.
+        ///   Looks up a localized string similar to Original dimensions.
         /// </summary>
         public static string InfoPage_DimensionsTitleTextBlock_Text {
             get {
@@ -277,6 +286,42 @@ namespace MagnifierApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to crop.
+        /// </summary>
+        public static string MagnifierPage_CropButton_Text {
+            get {
+                return ResourceManager.GetString("MagnifierPage_CropButton_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to gallery.
+        /// </summary>
+        public static string MagnifierPage_GalleryMenuItem_Text {
+            get {
+                return ResourceManager.GetString("MagnifierPage_GalleryMenuItem_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sorry, unable to read photo:(.
+        /// </summary>
+        public static string MagnifierPage_GalleryReadErrorMessageBox_Caption {
+            get {
+                return ResourceManager.GetString("MagnifierPage_GalleryReadErrorMessageBox_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Photo you selected seems unreadable to me, care to try with another photo?.
+        /// </summary>
+        public static string MagnifierPage_GalleryReadErrorMessageBox_Text {
+            get {
+                return ResourceManager.GetString("MagnifierPage_GalleryReadErrorMessageBox_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to info.
         /// </summary>
         public static string MagnifierPage_InfoButton_Text {
@@ -304,6 +349,15 @@ namespace MagnifierApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Local storage (2) + Photo library.
+        /// </summary>
+        public static string MagnifierPage_InformationTextBlock_LocalAndOriginalAndLibraryText {
+            get {
+                return ResourceManager.GetString("MagnifierPage_InformationTextBlock_LocalAndOriginalAndLibraryText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Local storage only.
         /// </summary>
         public static string MagnifierPage_InformationTextBlock_LocalText {
@@ -313,38 +367,20 @@ namespace MagnifierApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Local storage + Photo library.
+        /// </summary>
+        public static string MagnifierPage_InformationTextBlock_OriginalAndLibraryText {
+            get {
+                return ResourceManager.GetString("MagnifierPage_InformationTextBlock_OriginalAndLibraryText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New photo (not saved).
         /// </summary>
         public static string MagnifierPage_InformationTextBlock_UnsavedText {
             get {
                 return ResourceManager.GetString("MagnifierPage_InformationTextBlock_UnsavedText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to gallery.
-        /// </summary>
-        public static string MagnifierPage_PickPhotoButton_Text {
-            get {
-                return ResourceManager.GetString("MagnifierPage_PickPhotoButton_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sorry, unable to read photo:(.
-        /// </summary>
-        public static string MagnifierPage_PickPhotoReadErrorMessageBox_Caption {
-            get {
-                return ResourceManager.GetString("MagnifierPage_PickPhotoReadErrorMessageBox_Caption", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Photo you selected seems unreadable to me, care to try with another photo?.
-        /// </summary>
-        public static string MagnifierPage_PickPhotoReadErrorMessageBox_Text {
-            get {
-                return ResourceManager.GetString("MagnifierPage_PickPhotoReadErrorMessageBox_Text", resourceCulture);
             }
         }
         
@@ -526,27 +562,27 @@ namespace MagnifierApp.Resources {
         /// <summary>
         ///   Looks up a localized string similar to gallery.
         /// </summary>
-        public static string ViewfinderPage_PickPhotoButton_Text {
+        public static string ViewfinderPage_GalleryButton_Text {
             get {
-                return ResourceManager.GetString("ViewfinderPage_PickPhotoButton_Text", resourceCulture);
+                return ResourceManager.GetString("ViewfinderPage_GalleryButton_Text", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Sorry, unable to read photo:(.
         /// </summary>
-        public static string ViewfinderPage_PickPhotoReadErrorMessageBox_Caption {
+        public static string ViewfinderPage_GalleryReadErrorMessageBox_Caption {
             get {
-                return ResourceManager.GetString("ViewfinderPage_PickPhotoReadErrorMessageBox_Caption", resourceCulture);
+                return ResourceManager.GetString("ViewfinderPage_GalleryReadErrorMessageBox_Caption", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Photo you selected seems unreadable to me, care to try with another photo?.
         /// </summary>
-        public static string ViewfinderPage_PickPhotoReadErrorMessageBox_Text {
+        public static string ViewfinderPage_GalleryReadErrorMessageBox_Text {
             get {
-                return ResourceManager.GetString("ViewfinderPage_PickPhotoReadErrorMessageBox_Text", resourceCulture);
+                return ResourceManager.GetString("ViewfinderPage_GalleryReadErrorMessageBox_Text", resourceCulture);
             }
         }
     }

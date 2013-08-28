@@ -128,13 +128,13 @@
   <data name="App_Title_Text" xml:space="preserve">
     <value>PHOTO INSPECTOR</value>
   </data>
-  <data name="MagnifierPage_PickPhotoButton_Text" xml:space="preserve">
+  <data name="MagnifierPage_GalleryMenuItem_Text" xml:space="preserve">
     <value>gallery</value>
   </data>
-  <data name="MagnifierPage_PickPhotoReadErrorMessageBox_Caption" xml:space="preserve">
+  <data name="MagnifierPage_GalleryReadErrorMessageBox_Caption" xml:space="preserve">
     <value>Sorry, unable to read photo:(</value>
   </data>
-  <data name="MagnifierPage_PickPhotoReadErrorMessageBox_Text" xml:space="preserve">
+  <data name="MagnifierPage_GalleryReadErrorMessageBox_Text" xml:space="preserve">
     <value>Photo you selected seems unreadable to me, care to try with another photo?</value>
   </data>
   <data name="MagnifierPage_Title_Text" xml:space="preserve">
@@ -143,16 +143,16 @@
   <data name="ViewfinderPage_CaptureButton_Text" xml:space="preserve">
     <value>capture</value>
   </data>
-  <data name="ViewfinderPage_PickPhotoReadErrorMessageBox_Caption" xml:space="preserve">
+  <data name="ViewfinderPage_GalleryReadErrorMessageBox_Caption" xml:space="preserve">
     <value>Sorry, unable to read photo:(</value>
   </data>
-  <data name="ViewfinderPage_PickPhotoReadErrorMessageBox_Text" xml:space="preserve">
+  <data name="ViewfinderPage_GalleryReadErrorMessageBox_Text" xml:space="preserve">
     <value>Photo you selected seems unreadable to me, care to try with another photo?</value>
   </data>
   <data name="ViewfinderPage_FlashButton_Text" xml:space="preserve">
     <value>flash</value>
   </data>
-  <data name="ViewfinderPage_PickPhotoButton_Text" xml:space="preserve">
+  <data name="ViewfinderPage_GalleryButton_Text" xml:space="preserve">
     <value>gallery</value>
   </data>
   <data name="MagnifierPage_SaveButton_Text" xml:space="preserve">
@@ -255,10 +255,10 @@ Notice that if you delete the corresponding low resolution copies from Photos ap
     <value>Aperture</value>
   </data>
   <data name="InfoPage_DateTimeTitleTextBlock_Text" xml:space="preserve">
-    <value>Date and time</value>
+    <value>Original date and time</value>
   </data>
   <data name="InfoPage_DimensionsTitleTextBlock_Text" xml:space="preserve">
-    <value>Dimensions</value>
+    <value>Original dimensions</value>
   </data>
   <data name="InfoPage_ExposureTimeTitleTextBlock_Text" xml:space="preserve">
     <value>Exposure time</value>
@@ -287,5 +287,17 @@ Notice that if you delete the corresponding low resolution copies from Photos ap
   </data>
   <data name="InfoPage_SoftwareTitleTextBlock_Text" xml:space="preserve">
     <value>Software</value>
+  </data>
+  <data name="CropPage_AcceptButton_Text" xml:space="preserve">
+    <value>crop</value>
+  </data>
+  <data name="MagnifierPage_CropButton_Text" xml:space="preserve">
+    <value>crop</value>
+  </data>
+  <data name="MagnifierPage_InformationTextBlock_LocalAndOriginalAndLibraryText" xml:space="preserve">
+    <value>Local storage (2) + Photo library</value>
+  </data>
+  <data name="MagnifierPage_InformationTextBlock_OriginalAndLibraryText" xml:space="preserve">
+    <value>Local storage + Photo library</value>
   </data>
 </root>

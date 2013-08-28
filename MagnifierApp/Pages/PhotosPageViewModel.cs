@@ -8,20 +8,25 @@
 
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Media.PhoneExtensions;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Windows.Media.Imaging;
+using System.Linq;
 
 namespace MagnifierApp.Pages
 {
     public class PhotosPageViewModel
     {
         private const string LOCALS_PATH = @"\LocalImages";
+        private const string ORIGINALS_PATH = @"\OriginalImages";
 
         public class Photo
         {
             private string _localPath;
+            private string _originalPath;
             private string _libraryPath;
             private Stream _thumbnail;
 
@@ -32,6 +37,15 @@ namespace MagnifierApp.Pages
                     return _localPath;
                 }
             }
+
+            public string OriginalPath
+            {
+                get
+                {
+                    return _originalPath;
+                }
+            }
+
             public string LibraryPath
             {
                 get
@@ -61,9 +75,10 @@ namespace MagnifierApp.Pages
                 }
             }
 
-            public Photo(string localPath, string libraryPath, Stream thumbnail)
+            public Photo(string localPath, string originalPath, string libraryPath, Stream thumbnail)
             {
                 _localPath = localPath;
+                _originalPath = originalPath;
                 _libraryPath = libraryPath;
                 _thumbnail = thumbnail;
             }
@@ -84,7 +99,15 @@ namespace MagnifierApp.Pages
 
             using (var store = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                store.DeleteFile(photo.LocalPath);
+                if (photo.LocalPath != null)
+                {
+                    store.DeleteFile(photo.LocalPath);
+                }
+
+                if (photo.OriginalPath != null)
+                {
+                    store.DeleteFile(photo.OriginalPath);
+                }
             }
         }
 
@@ -94,7 +117,15 @@ namespace MagnifierApp.Pages
             {
                 foreach (var photo in Photos)
                 {
-                    store.DeleteFile(photo.LocalPath);
+                    if (photo.LocalPath != null)
+                    {
+                        store.DeleteFile(photo.LocalPath);
+                    }
+
+                    if (photo.OriginalPath != null)
+                    {
+                        store.DeleteFile(photo.OriginalPath);
+                    }
                 }
             }
 
@@ -105,41 +136,68 @@ namespace MagnifierApp.Pages
         {
             using (var store = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                if (store.DirectoryExists(LOCALS_PATH))
+                using (var library = new MediaLibrary())
                 {
-                    var localFilenames = store.GetFileNames(LOCALS_PATH + @"\*");
-
-                    using (var library = new MediaLibrary())
+                    using (var pictures = library.Pictures)
                     {
-                        using (var pictures = library.Pictures)
+                        for (int i = 0; i < pictures.Count; i++)
                         {
-                            foreach (var localFilename in localFilenames)
+                            using (var picture = pictures[i])
                             {
-                                string localPath = LOCALS_PATH + @"\" + localFilename;
+                                var libraryPath = picture.GetPath();
+                                var localPath = MatchLibraryPathWithLocalPath(libraryPath);
+                                var originalPath = MatchPathWithOriginalPath(libraryPath);
 
-                                for (int i = 0; i < pictures.Count; i++)
+                                if (localPath != null || originalPath != null)
                                 {
-                                    using (var picture = pictures[i])
-                                    {
-                                        var libraryPath = picture.GetPath();
-                                        var libraryFilename = FilenameFromPath(libraryPath);
+                                    var thumbnail = picture.GetThumbnail();
+                                    var photo = new Photo(localPath, originalPath, libraryPath, thumbnail);
 
-                                        if (localFilename == libraryFilename)
-                                        {
-                                            var thumbnail = picture.GetThumbnail();
-                                            var photo = new Photo(localPath, libraryPath, thumbnail);
-
-                                            Photos.Add(photo);
-
-                                            break;
-                                        }
-                                    }
+                                    Photos.Add(photo);
                                 }
                             }
                         }
                     }
                 }
             }
+        }
+
+        private string MatchLibraryPathWithLocalPath(string libraryPath)
+        {
+            var localPathCandidate = LOCALS_PATH + '\\' + FilenameFromPath(libraryPath);
+
+            using (var store = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                if (!store.FileExists(localPathCandidate))
+                {
+                    return null;
+                }
+            }
+
+            return localPathCandidate;
+        }
+
+        private string MatchPathWithOriginalPath(string path)
+        {
+            var originalFilename = FilenameFromPath(path);
+            var originalFilenameParts = originalFilename.Split(new char[] { '_' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (originalFilenameParts.Length == 3 && originalFilenameParts[0] == @"photoinspector")
+            {
+                originalFilename = originalFilenameParts[0] + '_' + originalFilenameParts[1] + @".jpg";
+            }
+
+            var originalPathCandidate = ORIGINALS_PATH + '\\' + originalFilename;
+
+            using (var store = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                if (!store.FileExists(originalPathCandidate))
+                {
+                    return null;
+                }
+            }
+
+            return originalPathCandidate;
         }
 
         private static string FilenameFromPath(string path)

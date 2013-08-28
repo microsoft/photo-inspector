@@ -75,7 +75,7 @@ namespace MagnifierApp
         {
             Microsoft.Devices.CameraButtons.ShutterKeyPressed += CameraButtons_ShutterKeyPressed;
 
-            PhotoModel.Singleton.CleanLocals();
+            PhotoModel.Singleton.CleanLocalStorage();
         }
 
         // Code to execute when the application is activated (brought to foreground)
@@ -84,7 +84,7 @@ namespace MagnifierApp
         {
             Microsoft.Devices.CameraButtons.ShutterKeyPressed += CameraButtons_ShutterKeyPressed;
 
-            PhotoModel.Singleton.CleanLocals();
+            PhotoModel.Singleton.CleanLocalStorage();
 
             if (!e.IsApplicationInstancePreserved)
             {

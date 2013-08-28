@@ -49,18 +49,6 @@ namespace MagnifierApp
 
             PhotoModel.Singleton.PropertyChanged += PhotoModel_PropertyChanged;
 
-            // Gallery button
-
-            var pickPhotoButton = new ApplicationBarIconButton()
-            {
-                IconUri = new Uri("/Assets/Icons/folder.png", UriKind.Relative),
-                Text = AppResources.MagnifierPage_PickPhotoButton_Text
-            };
-
-            pickPhotoButton.Click += PickPhotoButton_Click;
-
-            ApplicationBar.Buttons.Add(pickPhotoButton);
-
             // Save button
 
             _saveButton = new ApplicationBarIconButton()
@@ -72,6 +60,30 @@ namespace MagnifierApp
             _saveButton.Click += SaveButton_Click;
 
             ApplicationBar.Buttons.Add(_saveButton);
+
+            // Crop button
+
+            var cropButton = new ApplicationBarIconButton()
+            {
+                IconUri = new Uri("/Assets/Icons/crop.png", UriKind.Relative),
+                Text = AppResources.MagnifierPage_CropButton_Text
+            };
+
+            cropButton.Click += CropButton_Click;
+
+            ApplicationBar.Buttons.Add(cropButton);
+
+            // Info button
+
+            var infoButton = new ApplicationBarIconButton()
+            {
+                IconUri = new Uri("/Assets/Icons/info.png", UriKind.Relative),
+                Text = AppResources.MagnifierPage_InfoButton_Text
+            };
+
+            infoButton.Click += InfoButton_Click;
+
+            ApplicationBar.Buttons.Add(infoButton);
 
             // Share button
 
@@ -85,17 +97,16 @@ namespace MagnifierApp
 
             ApplicationBar.Buttons.Add(shareButton);
 
-            // Info button
+            // Gallery menu item
 
-            var infoButton = new ApplicationBarIconButton()
+            var galleryMenuItem = new ApplicationBarMenuItem()
             {
-                IconUri = new Uri("/Assets/Icons/info.png", UriKind.Relative),
-                Text = AppResources.MagnifierPage_InfoButton_Text
+                Text = AppResources.MagnifierPage_GalleryMenuItem_Text
             };
 
-            infoButton.Click += InfoButton_Click;
+            galleryMenuItem.Click += GalleryMenuItem_Click;
 
-            ApplicationBar.Buttons.Add(infoButton);
+            ApplicationBar.MenuItems.Add(galleryMenuItem);
 
             // About menu item
 
@@ -256,13 +267,17 @@ namespace MagnifierApp
 
         private void SetupInformationPanel()
         {
-            if (PhotoModel.Singleton.LocalPath != null && PhotoModel.Singleton.LibraryPath != null)
+            if (PhotoModel.Singleton.LocalPath != null && PhotoModel.Singleton.OriginalPath != null && PhotoModel.Singleton.LibraryPath != null)
+            {
+                InformationTextBlock.Text = AppResources.MagnifierPage_InformationTextBlock_LocalAndOriginalAndLibraryText;
+            }
+            else if (PhotoModel.Singleton.OriginalPath != null && PhotoModel.Singleton.LibraryPath != null)
+            {
+                InformationTextBlock.Text = AppResources.MagnifierPage_InformationTextBlock_OriginalAndLibraryText;
+            }
+            else if (PhotoModel.Singleton.LocalPath != null && PhotoModel.Singleton.LibraryPath != null)
             {
                 InformationTextBlock.Text = AppResources.MagnifierPage_InformationTextBlock_LocalAndLibraryText;
-            }
-            else if (PhotoModel.Singleton.LocalPath != null)
-            {
-                InformationTextBlock.Text = AppResources.MagnifierPage_InformationTextBlock_LocalText;
             }
             else if (PhotoModel.Singleton.LibraryPath != null)
             {
@@ -307,11 +322,6 @@ namespace MagnifierApp
             HighResolutionCropImage.Visibility = Visibility.Collapsed;
             Lense.Visibility = Visibility.Collapsed;
             InformationPanel.Visibility = Visibility.Visible;
-        }
-
-        private void PickPhotoButton_Click(object sender, EventArgs e)
-        {
-            _photoChooserTask.Show();
         }
 
         private async void SaveButton_Click(object sender, EventArgs e)
@@ -374,6 +384,16 @@ namespace MagnifierApp
             NavigationService.Navigate(new Uri("/Pages/InfoPage.xaml", UriKind.Relative));
         }
 
+        private void CropButton_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Pages/CropPage.xaml", UriKind.Relative));
+        }
+        
+        private void GalleryMenuItem_Click(object sender, EventArgs e)
+        {
+            _photoChooserTask.Show();
+        }
+
         private void AboutMenuItem_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/Pages/AboutPage.xaml", UriKind.Relative));
@@ -391,8 +411,8 @@ namespace MagnifierApp
                 }
                 else
                 {
-                    var result = MessageBox.Show(AppResources.MagnifierPage_PickPhotoReadErrorMessageBox_Text,
-                        AppResources.MagnifierPage_PickPhotoReadErrorMessageBox_Caption, MessageBoxButton.OKCancel);
+                    var result = MessageBox.Show(AppResources.MagnifierPage_GalleryReadErrorMessageBox_Text,
+                        AppResources.MagnifierPage_GalleryReadErrorMessageBox_Caption, MessageBoxButton.OKCancel);
 
                     if (result.HasFlag(MessageBoxResult.OK))
                     {
