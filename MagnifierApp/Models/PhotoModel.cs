@@ -6,6 +6,7 @@
  * See LICENSE.TXT for license information.
  */
 
+using MagnifierApp.Utilities;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Media.PhoneExtensions;
 using Nokia.Graphics.Imaging;
@@ -29,8 +30,7 @@ namespace MagnifierApp.Models
         private const string TOMBSTONING_ORIGINAL_FILENAME = @"original.jpg";
         private const string TOMBSTONING_LIBRARYPATH_KEY = "PhotoModel.LibraryPath";
         private const string TOMBSTONING_LOCALPATH_KEY = "PhotoModel.LocalPath";
-        private const string LOCALS_PATH = @"\LocalImages";
-        private const string ORIGINALS_PATH = @"\OriginalImages";
+        private const string TOMBSTONING_ORIGINALPATH_KEY = "PhotoModel.OriginalPath";
 
         private static PhotoModel _instance = null;
 
@@ -240,7 +240,7 @@ namespace MagnifierApp.Models
             if (LibraryPath != libraryPath)
             {
                 LibraryPath = libraryPath;
-                LocalPath = MatchLibraryPathWithLocalPath(libraryPath);
+                LocalPath = Mapping.MatchLibraryPathWithLocalPath(libraryPath);
 
                 if (LocalPath != null)
                 {
@@ -256,7 +256,7 @@ namespace MagnifierApp.Models
                     Image = image;
                 }
 
-                OriginalPath = MatchPathWithOriginalPath(libraryPath);
+                OriginalPath = Mapping.MatchPathWithOriginalPath(libraryPath);
 
                 if (OriginalPath != null)
                 {
@@ -285,7 +285,7 @@ namespace MagnifierApp.Models
                     if (LibraryPath != libraryPath)
                     {
                         LibraryPath = libraryPath;
-                        LocalPath = MatchLibraryPathWithLocalPath(libraryPath);
+                        LocalPath = Mapping.MatchLibraryPathWithLocalPath(libraryPath);
 
                         if (LocalPath != null)
                         {
@@ -299,7 +299,7 @@ namespace MagnifierApp.Models
                             Image = picture.GetImage();
                         }
 
-                        OriginalPath = MatchPathWithOriginalPath(libraryPath);
+                        OriginalPath = Mapping.MatchPathWithOriginalPath(libraryPath);
 
                         if (OriginalPath != null)
                         {
@@ -320,11 +320,11 @@ namespace MagnifierApp.Models
 
             if (LocalPath != localPath)
             {
-                LibraryPath = MatchLocalPathWithLibraryPath(localPath);
+                LibraryPath = Mapping.MatchLocalPathWithLibraryPath(localPath);
                 LocalPath = localPath;
                 Image = image;
 
-                OriginalPath = MatchPathWithOriginalPath(localPath);
+                OriginalPath = Mapping.MatchPathWithOriginalPath(localPath);
 
                 if (OriginalPath != null)
                 {
@@ -424,12 +424,12 @@ namespace MagnifierApp.Models
 
                         using (var store = IsolatedStorageFile.GetUserStoreForApplication())
                         {
-                            if (!store.DirectoryExists(ORIGINALS_PATH))
+                            if (!store.DirectoryExists(Mapping.ORIGINALS_PATH))
                             {
-                                store.CreateDirectory(ORIGINALS_PATH);
+                                store.CreateDirectory(Mapping.ORIGINALS_PATH);
                             }
 
-                            var originalPath = ORIGINALS_PATH + @"\" + filenameBase + @".jpg";
+                            var originalPath = Mapping.ORIGINALS_PATH + @"\" + filenameBase + @".jpg";
 
                             using (var file = store.CreateFile(originalPath))
                             {
@@ -452,12 +452,12 @@ namespace MagnifierApp.Models
 
                     using (var store = IsolatedStorageFile.GetUserStoreForApplication())
                     {
-                        if (!store.DirectoryExists(LOCALS_PATH))
+                        if (!store.DirectoryExists(Mapping.LOCALS_PATH))
                         {
-                            store.CreateDirectory(LOCALS_PATH);
+                            store.CreateDirectory(Mapping.LOCALS_PATH);
                         }
 
-                        var localPath = LOCALS_PATH + @"\" + filenameBase + @".jpg";
+                        var localPath = Mapping.LOCALS_PATH + @"\" + filenameBase + @".jpg";
 
                         using (var file = store.CreateFile(localPath))
                         {
@@ -503,9 +503,9 @@ namespace MagnifierApp.Models
         {
             using (var store = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                if (store.DirectoryExists(LOCALS_PATH))
+                if (store.DirectoryExists(Mapping.LOCALS_PATH))
                 {
-                    var localsArray = store.GetFileNames(LOCALS_PATH + @"\*");
+                    var localsArray = store.GetFileNames(Mapping.LOCALS_PATH + @"\*");
 
                     using (var library = new MediaLibrary())
                     {
@@ -519,7 +519,7 @@ namespace MagnifierApp.Models
                                 {
                                     using (var picture = pictures[i])
                                     {
-                                        var libraryFilename = FilenameFromPath(picture.GetPath());
+                                        var libraryFilename = Mapping.FilenameFromPath(picture.GetPath());
 
                                         if (localFilename == libraryFilename)
                                         {
@@ -530,7 +530,7 @@ namespace MagnifierApp.Models
 
                                 if (!found)
                                 {
-                                    var localPath = LOCALS_PATH + @"\" + localFilename;
+                                    var localPath = Mapping.LOCALS_PATH + @"\" + localFilename;
 
                                     store.DeleteFile(localPath);
 
@@ -549,9 +549,9 @@ namespace MagnifierApp.Models
                     }
                 }
 
-                if (store.DirectoryExists(ORIGINALS_PATH))
+                if (store.DirectoryExists(Mapping.ORIGINALS_PATH))
                 {
-                    var originalsArray = store.GetFileNames(ORIGINALS_PATH + @"\*");
+                    var originalsArray = store.GetFileNames(Mapping.ORIGINALS_PATH + @"\*");
 
                     using (var library = new MediaLibrary())
                     {
@@ -565,7 +565,7 @@ namespace MagnifierApp.Models
                                 {
                                     using (var picture = pictures[i])
                                     {
-                                        var libraryFilename = FilenameFromPath(picture.GetPath());
+                                        var libraryFilename = Mapping.FilenameFromPath(picture.GetPath());
                                         var libraryFilenameParts = libraryFilename.Split(new char[] { '_' }, StringSplitOptions.RemoveEmptyEntries);
 
                                         if (libraryFilenameParts.Length == 3 && libraryFilenameParts[0] == @"photoinspector")
@@ -582,7 +582,7 @@ namespace MagnifierApp.Models
 
                                 if (!found)
                                 {
-                                    var originalPath = ORIGINALS_PATH + @"\" + originalFilename;
+                                    var originalPath = Mapping.ORIGINALS_PATH + @"\" + originalFilename;
 
                                     store.DeleteFile(originalPath);
 
@@ -651,6 +651,11 @@ namespace MagnifierApp.Models
                         {
                             IsolatedStorageSettings.ApplicationSettings[TOMBSTONING_LOCALPATH_KEY] = LocalPath;
                         }
+
+                        if (OriginalPath != null)
+                        {
+                            IsolatedStorageSettings.ApplicationSettings[TOMBSTONING_ORIGINALPATH_KEY] = OriginalPath;
+                        }
                     }
                 }
             }
@@ -718,6 +723,12 @@ namespace MagnifierApp.Models
                         LocalPath = IsolatedStorageSettings.ApplicationSettings[TOMBSTONING_LOCALPATH_KEY] as string;
                         IsolatedStorageSettings.ApplicationSettings.Remove(TOMBSTONING_LOCALPATH_KEY);
                     }
+
+                    if (IsolatedStorageSettings.ApplicationSettings.Contains(TOMBSTONING_ORIGINALPATH_KEY))
+                    {
+                        OriginalPath = IsolatedStorageSettings.ApplicationSettings[TOMBSTONING_ORIGINALPATH_KEY] as string;
+                        IsolatedStorageSettings.ApplicationSettings.Remove(TOMBSTONING_ORIGINALPATH_KEY);
+                    }
                 }
             }
         }
@@ -725,89 +736,6 @@ namespace MagnifierApp.Models
         #endregion Tombstoning methods
 
         #region Private methods
-
-        /// <summary>
-        /// Takes a full localPath to a file and returns the last localPath component.
-        /// </summary>
-        /// <param name="localPath">Path</param>
-        /// <returns>Last component of the given localPath</returns>
-        private static string FilenameFromPath(string path)
-        {
-            var pathParts = path.Split('\\');
-
-            return pathParts[pathParts.Length - 1];
-        }
-
-        /// <summary>
-        /// Takes a MediaLibrary photo localPath and tries to find a local localPath for a high
-        /// resolution version of the same photo.
-        /// </summary>
-        /// <param name="libraryPath">Path to a photo in MediaLibrary</param>
-        /// <returns>Path to a local copy of the same photo</returns>
-        private string MatchLibraryPathWithLocalPath(string libraryPath)
-        {
-            var localPathCandidate = LOCALS_PATH + '\\' + FilenameFromPath(libraryPath);
-
-            using (var store = IsolatedStorageFile.GetUserStoreForApplication())
-            {
-                if (!store.FileExists(localPathCandidate))
-                {
-                    return null;
-                }
-            }
-
-            return localPathCandidate;
-        }
-
-        private string MatchLocalPathWithLibraryPath(string localPath)
-        {
-            var localFilename = FilenameFromPath(localPath);
-
-            using (var library = new MediaLibrary())
-            {
-                using (var pictures = library.Pictures)
-                {
-                    for (int i = 0; i < pictures.Count; i++)
-                    {
-                        using (var picture = pictures[i])
-                        {
-                            var libraryPath = picture.GetPath();
-                            var libraryFilename = FilenameFromPath(libraryPath);
-
-                            if (localFilename == libraryFilename)
-                            {
-                                return libraryPath;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return null;
-        }
-
-        private string MatchPathWithOriginalPath(string path)
-        {
-            var originalFilename = FilenameFromPath(path);
-            var originalFilenameParts = originalFilename.Split(new char[] { '_' }, StringSplitOptions.RemoveEmptyEntries);
-
-            if (originalFilenameParts.Length == 3 && originalFilenameParts[0] == @"photoinspector")
-            {
-                originalFilename = originalFilenameParts[0] + '_' + originalFilenameParts[1] + @".jpg";
-            }
-
-            var originalPathCandidate = ORIGINALS_PATH + '\\' + originalFilename;
-
-            using (var store = IsolatedStorageFile.GetUserStoreForApplication())
-            {
-                if (!store.FileExists(originalPathCandidate))
-                {
-                    return null;
-                }
-            }
-
-            return originalPathCandidate;
-        }
 
         private IBuffer StreamToBuffer(Stream stream)
         {

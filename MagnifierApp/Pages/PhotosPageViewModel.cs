@@ -15,14 +15,12 @@ using System.IO;
 using System.IO.IsolatedStorage;
 using System.Windows.Media.Imaging;
 using System.Linq;
+using MagnifierApp.Utilities;
 
 namespace MagnifierApp.Pages
 {
     public class PhotosPageViewModel
     {
-        private const string LOCALS_PATH = @"\LocalImages";
-        private const string ORIGINALS_PATH = @"\OriginalImages";
-
         public class Photo
         {
             private string _localPath;
@@ -145,8 +143,8 @@ namespace MagnifierApp.Pages
                             using (var picture = pictures[i])
                             {
                                 var libraryPath = picture.GetPath();
-                                var localPath = MatchLibraryPathWithLocalPath(libraryPath);
-                                var originalPath = MatchPathWithOriginalPath(libraryPath);
+                                var localPath = Mapping.MatchLibraryPathWithLocalPath(libraryPath);
+                                var originalPath = Mapping.MatchPathWithOriginalPath(libraryPath);
 
                                 if (localPath != null || originalPath != null)
                                 {
@@ -160,51 +158,6 @@ namespace MagnifierApp.Pages
                     }
                 }
             }
-        }
-
-        private string MatchLibraryPathWithLocalPath(string libraryPath)
-        {
-            var localPathCandidate = LOCALS_PATH + '\\' + FilenameFromPath(libraryPath);
-
-            using (var store = IsolatedStorageFile.GetUserStoreForApplication())
-            {
-                if (!store.FileExists(localPathCandidate))
-                {
-                    return null;
-                }
-            }
-
-            return localPathCandidate;
-        }
-
-        private string MatchPathWithOriginalPath(string path)
-        {
-            var originalFilename = FilenameFromPath(path);
-            var originalFilenameParts = originalFilename.Split(new char[] { '_' }, StringSplitOptions.RemoveEmptyEntries);
-
-            if (originalFilenameParts.Length == 3 && originalFilenameParts[0] == @"photoinspector")
-            {
-                originalFilename = originalFilenameParts[0] + '_' + originalFilenameParts[1] + @".jpg";
-            }
-
-            var originalPathCandidate = ORIGINALS_PATH + '\\' + originalFilename;
-
-            using (var store = IsolatedStorageFile.GetUserStoreForApplication())
-            {
-                if (!store.FileExists(originalPathCandidate))
-                {
-                    return null;
-                }
-            }
-
-            return originalPathCandidate;
-        }
-
-        private static string FilenameFromPath(string path)
-        {
-            var pathParts = path.Split('\\');
-
-            return pathParts[pathParts.Length - 1];
         }
     }
 }
