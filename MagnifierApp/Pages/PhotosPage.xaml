@@ -90,14 +90,13 @@
             </ScrollViewer>
 
             <StackPanel x:Name="GuidePanel" Visibility="Collapsed">
-                <TextBlock Text="{Binding Path=LocalizedResources.PhotosPage_GuideTextBlock_Text, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}"
-                           TextWrapping="Wrap" Margin="12,0,12,0"/>
+                <TextBlock x:Name="GuideTextBlock" Style="{StaticResource PhoneTextNormalStyle}" TextWrapping="Wrap" Margin="12,0,12,0"/>
             </StackPanel>
         </Grid>
     </Grid>
 
     <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar Opacity="0.5"
+        <shell:ApplicationBar Opacity="0.5" IsVisible="False"
                               ForegroundColor="{StaticResource MagnifierAppApplicationBarForegroundColor}"
                               BackgroundColor="{StaticResource MagnifierAppApplicationBarBackgroundColor}">
             <!-- populated from code -->

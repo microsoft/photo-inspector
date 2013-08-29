@@ -40,6 +40,7 @@ namespace MagnifierApp
         private Point _lastLenseCenterForRendering = new Point(0, 0);
         private bool _renderingLenseContent = false;
         private bool _saving = false;
+        private bool _editor = false;
 
         public MagnifierPage()
         {
@@ -97,28 +98,6 @@ namespace MagnifierApp
 
             ApplicationBar.Buttons.Add(shareButton);
 
-            // Gallery menu item
-
-            var galleryMenuItem = new ApplicationBarMenuItem()
-            {
-                Text = AppResources.MagnifierPage_GalleryMenuItem_Text
-            };
-
-            galleryMenuItem.Click += GalleryMenuItem_Click;
-
-            ApplicationBar.MenuItems.Add(galleryMenuItem);
-
-            // About menu item
-
-            var aboutMenuItem = new ApplicationBarMenuItem()
-            {
-                Text = AppResources.MagnifierPage_AboutMenuItem_Text
-            };
-
-            aboutMenuItem.Click += AboutMenuItem_Click;
-
-            ApplicationBar.MenuItems.Add(aboutMenuItem);
-
             // Lense is positioned to current touch point with _lenseTransform
             Lense.RenderTransform = _lenseTransform;
 
@@ -161,26 +140,78 @@ namespace MagnifierApp
         {
             base.OnNavigatedTo(e);
 
-            var queryString = this.NavigationContext.QueryString;
-
-            if (PhotoModel.Singleton.Image == null)
+            if (e.NavigationMode == NavigationMode.New)
             {
+                var queryString = this.NavigationContext.QueryString;
+
                 if (queryString.ContainsKey("token"))
                 {
+                    _editor = true;
+
                     PhotoModel.Singleton.FromLibraryImage(queryString["token"]);
                 }
                 else if (queryString.ContainsKey("FileId"))
                 {
+                    _editor = true;
+
                     PhotoModel.Singleton.FromLibraryImage(queryString["FileId"]);
                 }
+                else if (queryString.ContainsKey("editor"))
+                {
+                    _editor = true;
+                }
+
+                if (!_editor)
+                {
+                    // Camera menu item
+
+                    var cameraMenuItem = new ApplicationBarMenuItem()
+                    {
+                        Text = AppResources.MagnifierPage_CameraMenuItem_Text
+                    };
+
+                    cameraMenuItem.Click += CameraMenuItem_Click;
+
+                    ApplicationBar.MenuItems.Add(cameraMenuItem);
+
+                    // Gallery menu item
+
+                    var galleryMenuItem = new ApplicationBarMenuItem()
+                    {
+                        Text = AppResources.MagnifierPage_GalleryMenuItem_Text
+                    };
+
+                    galleryMenuItem.Click += GalleryMenuItem_Click;
+
+                    ApplicationBar.MenuItems.Add(galleryMenuItem);
+
+                    // Local photos menu item
+
+                    var photosMenuItem = new ApplicationBarMenuItem()
+                    {
+                        Text = AppResources.MagnifierPage_PhotosMenuItem_Text
+                    };
+
+                    photosMenuItem.Click += PhotosMenuItem_Click;
+
+                    ApplicationBar.MenuItems.Add(photosMenuItem);
+                }
+
+                // About menu item
+
+                var aboutMenuItem = new ApplicationBarMenuItem()
+                {
+                    Text = AppResources.MagnifierPage_AboutMenuItem_Text
+                };
+
+                aboutMenuItem.Click += AboutMenuItem_Click;
+
+                ApplicationBar.MenuItems.Add(aboutMenuItem);
             }
 
             _saveButton.IsEnabled = PhotoModel.Singleton.LibraryPath == null;
 
-            if (PhotoModel.Singleton.Image != null)
-            {
-                BeginSession(PhotoModel.Singleton.Image);
-            }
+            BeginSession(PhotoModel.Singleton.Image);
         }
 
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
@@ -388,10 +419,20 @@ namespace MagnifierApp
         {
             NavigationService.Navigate(new Uri("/Pages/CropPage.xaml", UriKind.Relative));
         }
+
+        private void CameraMenuItem_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Pages/ViewfinderPage.xaml?picker", UriKind.Relative));
+        }
         
         private void GalleryMenuItem_Click(object sender, EventArgs e)
         {
             _photoChooserTask.Show();
+        }
+
+        private void PhotosMenuItem_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Pages/PhotosPage.xaml?picker", UriKind.Relative));
         }
 
         private void AboutMenuItem_Click(object sender, EventArgs e)

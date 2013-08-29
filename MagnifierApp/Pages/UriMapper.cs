@@ -24,14 +24,20 @@ namespace MagnifierApp.Pages
 
             if (tempUri.Contains("RichMediaEdit") && tempUri.Contains("token"))
             {
+                tempUri += "&editor";
+
                 return new Uri(tempUri.Replace("PhotosPage", "MagnifierPage"), UriKind.Relative);
             }
             else if (tempUri.Contains("EditPhotoContent") && tempUri.Contains("FileId"))
             {
+                tempUri += "&editor";
+
                 return new Uri(tempUri.Replace("PhotosPage", "MagnifierPage"), UriKind.Relative);
             }
             else if (tempUri.Contains("ViewfinderLaunch"))
             {
+                tempUri += "&lense";
+
                 return new Uri(tempUri.Replace("PhotosPage", "ViewfinderPage"), UriKind.Relative);
             }
 

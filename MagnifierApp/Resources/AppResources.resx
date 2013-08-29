@@ -129,7 +129,7 @@
     <value>PHOTO INSPECTOR</value>
   </data>
   <data name="MagnifierPage_GalleryMenuItem_Text" xml:space="preserve">
-    <value>gallery</value>
+    <value>photos gallery</value>
   </data>
   <data name="MagnifierPage_GalleryReadErrorMessageBox_Caption" xml:space="preserve">
     <value>Sorry, unable to read photo:(</value>
@@ -217,12 +217,10 @@
   <data name="PhotosPage_DeleteMenuItem_Text" xml:space="preserve">
     <value>delete</value>
   </data>
-  <data name="PhotosPage_GuideTextBlock_Text" xml:space="preserve">
+  <data name="PhotosPage_PickerGuideTextBlock_Text" xml:space="preserve">
     <value>No photos in application local storage.
 
-High resolution photos too large for the Photos library and cropped photos that have a locally saved original for later reframing purposes are displayed here. To access other photos tap the gallery button, or go capturing new photos by tapping the camera button.
-
-Notice that if you delete the corresponding photo copies from the Photos application's Camera Roll, the corresponding locally saved photos in this application will also be deleted automatically when the Photo Inspector is next time opened.</value>
+High resolution photos too large for the Photos library and cropped photos that have a locally saved original for later reframing purposes are displayed here.</value>
   </data>
   <data name="PhotosPage_ShareMenuItem_Text" xml:space="preserve">
     <value>share...</value>
@@ -296,5 +294,18 @@ Notice that if you delete the corresponding photo copies from the Photos applica
   </data>
   <data name="MagnifierPage_InformationTextBlock_OriginalAndLibraryText" xml:space="preserve">
     <value>Local storage + Photo library</value>
+  </data>
+  <data name="MagnifierPage_CameraMenuItem_Text" xml:space="preserve">
+    <value>camera</value>
+  </data>
+  <data name="MagnifierPage_PhotosMenuItem_Text" xml:space="preserve">
+    <value>local photos</value>
+  </data>
+  <data name="PhotosPage_StandaloneGuideTextBlock_Text" xml:space="preserve">
+    <value>No photos in application local storage.
+
+High resolution photos too large for the Photos library and cropped photos that have a locally saved original for later reframing purposes are displayed here. To access other photos tap the gallery button, or go capturing new photos by tapping the camera button.
+
+Notice that if you delete the corresponding photo copies from the Photos application's Camera Roll, the corresponding locally saved photos in this application will also be deleted automatically when the Photo Inspector is next time opened.</value>
   </data>
 </root>
