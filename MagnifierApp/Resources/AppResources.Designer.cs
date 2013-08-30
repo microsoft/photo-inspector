@@ -394,6 +394,15 @@ namespace MagnifierApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to revert to original.
+        /// </summary>
+        public static string MagnifierPage_RevertMenuItem_Text {
+            get {
+                return ResourceManager.GetString("MagnifierPage_RevertMenuItem_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to save.
         /// </summary>
         public static string MagnifierPage_SaveButton_Text {

@@ -31,6 +31,7 @@ namespace MagnifierApp.Models
         private const string TOMBSTONING_LIBRARYPATH_KEY = "PhotoModel.LibraryPath";
         private const string TOMBSTONING_LOCALPATH_KEY = "PhotoModel.LocalPath";
         private const string TOMBSTONING_ORIGINALPATH_KEY = "PhotoModel.OriginalPath";
+        private const string TOMBSTONING_ORIGINALLIBRARYPATH_KEY = "PhotoModel.OriginalLibraryPath";
 
         private static PhotoModel _instance = null;
 
@@ -39,6 +40,7 @@ namespace MagnifierApp.Models
         private string _libraryPath = null;
         private string _localPath = null;
         private string _originalPath = null;
+        private string _originalLibraryPath = null;
         private Size _imageSize = new Size(0, 0);
 
         #endregion Members
@@ -211,6 +213,22 @@ namespace MagnifierApp.Models
             }
         }
 
+        private string OriginalLibraryPath
+        {
+            get
+            {
+                return _originalLibraryPath;
+            }
+
+            set
+            {
+                if (_originalLibraryPath != value)
+                {
+                    _originalLibraryPath = value;
+                }
+            }
+        }
+
         #endregion Properties
 
         #region Constructors and destructors
@@ -365,9 +383,41 @@ namespace MagnifierApp.Models
                 Original = original;
             }
 
-            Image = image;
-            LibraryPath = null;
+            if (LibraryPath != null)
+            {
+                OriginalLibraryPath = LibraryPath;
+
+                LibraryPath = null;
+            }
+
             LocalPath = null;
+
+            Image = image;
+        }
+
+        public void RevertOriginal()
+        {
+            var originalLibraryPathCopy = OriginalLibraryPath;
+
+            OriginalLibraryPath = null;
+            Original = null;
+
+            using (var library = new MediaLibrary())
+            {
+                using (var pictures = library.Pictures)
+                {
+                    for (int i = 0; i < pictures.Count; i++)
+                    {
+                        using (var picture = pictures[i])
+                        {
+                            if (picture.GetPath() == originalLibraryPathCopy)
+                            {
+                                PhotoModel.Singleton.FromLibraryImage(originalLibraryPathCopy, picture.GetImage());
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public void Clear()
@@ -377,6 +427,7 @@ namespace MagnifierApp.Models
             LibraryPath = null;
             LocalPath = null;
             OriginalPath = null;
+            OriginalLibraryPath = null;
             Singleton = null;
         }
 
@@ -656,6 +707,11 @@ namespace MagnifierApp.Models
                         {
                             IsolatedStorageSettings.ApplicationSettings[TOMBSTONING_ORIGINALPATH_KEY] = OriginalPath;
                         }
+
+                        if (OriginalLibraryPath != null)
+                        {
+                            IsolatedStorageSettings.ApplicationSettings[TOMBSTONING_ORIGINALLIBRARYPATH_KEY] = OriginalLibraryPath;
+                        }
                     }
                 }
             }
@@ -728,6 +784,12 @@ namespace MagnifierApp.Models
                     {
                         OriginalPath = IsolatedStorageSettings.ApplicationSettings[TOMBSTONING_ORIGINALPATH_KEY] as string;
                         IsolatedStorageSettings.ApplicationSettings.Remove(TOMBSTONING_ORIGINALPATH_KEY);
+                    }
+
+                    if (IsolatedStorageSettings.ApplicationSettings.Contains(TOMBSTONING_ORIGINALLIBRARYPATH_KEY))
+                    {
+                        OriginalLibraryPath = IsolatedStorageSettings.ApplicationSettings[TOMBSTONING_ORIGINALLIBRARYPATH_KEY] as string;
+                        IsolatedStorageSettings.ApplicationSettings.Remove(TOMBSTONING_ORIGINALLIBRARYPATH_KEY);
                     }
                 }
             }

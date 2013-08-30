@@ -41,6 +41,7 @@ namespace MagnifierApp
         private bool _renderingLenseContent = false;
         private bool _saving = false;
         private bool _editor = false;
+        private ApplicationBarMenuItem _revertMenuItem = null;
 
         public MagnifierPage()
         {
@@ -126,14 +127,28 @@ namespace MagnifierApp
 
         private void PhotoModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == PhotoModel.LocalPathPropertyName || e.PropertyName == PhotoModel.LibraryPathPropertyName)
+            if (e.PropertyName == PhotoModel.LocalPathPropertyName ||
+                e.PropertyName == PhotoModel.LibraryPathPropertyName ||
+                e.PropertyName == PhotoModel.OriginalPathPropertyName)
             {
-                // Disable save button if photo already exists in library
-                _saveButton.IsEnabled = PhotoModel.Singleton.LibraryPath == null;
-
                 // Source information for photo may have changed, update information panel
                 SetupInformationPanel();
             }
+            else if (e.PropertyName == PhotoModel.ImagePropertyName)
+            {
+                EndSession();
+
+                if (PhotoModel.Singleton.Image != null)
+                {
+                    BeginSession(PhotoModel.Singleton.Image);
+                }
+            }
+
+            // Disable save button if photo already exists in library
+            _saveButton.IsEnabled = PhotoModel.Singleton.LibraryPath == null;
+
+            // Enable revert to original button if there is an original to revert to
+            _revertMenuItem.IsEnabled = PhotoModel.Singleton.Original != null;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -197,6 +212,17 @@ namespace MagnifierApp
                     ApplicationBar.MenuItems.Add(photosMenuItem);
                 }
 
+                // Revert menu item
+
+                _revertMenuItem = new ApplicationBarMenuItem()
+                {
+                    Text = AppResources.MagnifierPage_RevertMenuItem_Text
+                };
+
+                _revertMenuItem.Click += RevertMenuItem_Click;
+
+                ApplicationBar.MenuItems.Add(_revertMenuItem);
+
                 // About menu item
 
                 var aboutMenuItem = new ApplicationBarMenuItem()
@@ -210,6 +236,7 @@ namespace MagnifierApp
             }
 
             _saveButton.IsEnabled = PhotoModel.Singleton.LibraryPath == null;
+            _revertMenuItem.IsEnabled = PhotoModel.Singleton.Original != null;
 
             BeginSession(PhotoModel.Singleton.Image);
         }
@@ -433,6 +460,11 @@ namespace MagnifierApp
         private void PhotosMenuItem_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/Pages/PhotosPage.xaml?picker", UriKind.Relative));
+        }
+
+        private void RevertMenuItem_Click(object sender, EventArgs e)
+        {
+            PhotoModel.Singleton.RevertOriginal();
         }
 
         private void AboutMenuItem_Click(object sender, EventArgs e)

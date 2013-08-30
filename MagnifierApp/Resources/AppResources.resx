@@ -301,6 +301,9 @@ High resolution photos too large for the Photos library and cropped photos that 
   <data name="MagnifierPage_PhotosMenuItem_Text" xml:space="preserve">
     <value>local photos</value>
   </data>
+  <data name="MagnifierPage_RevertMenuItem_Text" xml:space="preserve">
+    <value>revert to original</value>
+  </data>
   <data name="PhotosPage_StandaloneGuideTextBlock_Text" xml:space="preserve">
     <value>No photos in application local storage.
 
