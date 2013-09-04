@@ -397,22 +397,35 @@ namespace MagnifierApp.Models
 
         public void RevertOriginal()
         {
-            var originalLibraryPathCopy = OriginalLibraryPath;
-
-            OriginalLibraryPath = null;
-            Original = null;
-
-            using (var library = new MediaLibrary())
+            if (OriginalLibraryPath == null)
             {
-                using (var pictures = library.Pictures)
+                var original = new MemoryStream();
+
+                Original.Position = 0;
+                Original.CopyTo(original);
+                Original = null;
+
+                Image = original;
+            }
+            else
+            {
+                var originalLibraryPathCopy = OriginalLibraryPath;
+
+                OriginalLibraryPath = null;
+                Original = null;
+
+                using (var library = new MediaLibrary())
                 {
-                    for (int i = 0; i < pictures.Count; i++)
+                    using (var pictures = library.Pictures)
                     {
-                        using (var picture = pictures[i])
+                        for (int i = 0; i < pictures.Count; i++)
                         {
-                            if (picture.GetPath() == originalLibraryPathCopy)
+                            using (var picture = pictures[i])
                             {
-                                PhotoModel.Singleton.FromLibraryImage(originalLibraryPathCopy, picture.GetImage());
+                                if (picture.GetPath() == originalLibraryPathCopy)
+                                {
+                                    PhotoModel.Singleton.FromLibraryImage(originalLibraryPathCopy, picture.GetImage());
+                                }
                             }
                         }
                     }
