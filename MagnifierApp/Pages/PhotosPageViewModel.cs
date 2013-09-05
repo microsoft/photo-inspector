@@ -16,6 +16,7 @@ using System.IO.IsolatedStorage;
 using System.Windows.Media.Imaging;
 using System.Linq;
 using MagnifierApp.Utilities;
+using System.Windows;
 
 namespace MagnifierApp.Pages
 {
@@ -62,6 +63,14 @@ namespace MagnifierApp.Pages
                     bitmap.SetSource(_thumbnail);
 
                     return bitmap;
+                }
+            }
+
+            public Visibility CropIndicatorVisibility
+            {
+                get
+                {
+                    return _originalPath == null ? Visibility.Collapsed : Visibility.Visible;
                 }
             }
 

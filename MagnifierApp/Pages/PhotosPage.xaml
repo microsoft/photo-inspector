@@ -73,17 +73,22 @@
                 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Image Source="{Binding Thumbnail}" Margin="0,0,8,8" Tap="Thumbnail_Tap"
-                                   CacheMode="BitmapCache" Tag="{Binding Tag}">
-                                <toolkit:ContextMenuService.ContextMenu>
-                                    <toolkit:ContextMenu Opened="ContextMenu_Opened" Closed="ContextMenu_Closed">
-                                        <toolkit:MenuItem Header="{Binding Path=LocalizedResources.PhotosPage_ShareMenuItem_Text, Source={StaticResource LocalizedStrings}}"
-                                                          Click="Share_Click" CommandParameter="{Binding Tag}"/>
-                                        <toolkit:MenuItem Header="{Binding Path=LocalizedResources.PhotosPage_DeleteMenuItem_Text, Source={StaticResource LocalizedStrings}}"
-                                                          Click="Delete_Click" CommandParameter="{Binding Tag}"/>
-                                    </toolkit:ContextMenu>
-                                </toolkit:ContextMenuService.ContextMenu>
-                            </Image>
+                            <Grid Margin="0,0,8,8">
+                                <Image Source="{Binding Thumbnail}" Tap="Thumbnail_Tap"
+                                       CacheMode="BitmapCache" Tag="{Binding Tag}">
+                                    <toolkit:ContextMenuService.ContextMenu>
+                                        <toolkit:ContextMenu Opened="ContextMenu_Opened" Closed="ContextMenu_Closed">
+                                            <toolkit:MenuItem Header="{Binding Path=LocalizedResources.PhotosPage_ShareMenuItem_Text, Source={StaticResource LocalizedStrings}}"
+                                                              Click="Share_Click" CommandParameter="{Binding Tag}"/>
+                                            <toolkit:MenuItem Header="{Binding Path=LocalizedResources.PhotosPage_DeleteMenuItem_Text, Source={StaticResource LocalizedStrings}}"
+                                                              Click="Delete_Click" CommandParameter="{Binding Tag}"/>
+                                        </toolkit:ContextMenu>
+                                    </toolkit:ContextMenuService.ContextMenu>
+                                </Image>
+
+                                <Image Source="/Assets/Icons/crop_indicator.png" Width="42" Height="42" Margin="-4" IsHitTestVisible="False"
+                                       HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="{Binding CropIndicatorVisibility}"/>
+                            </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

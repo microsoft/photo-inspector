@@ -148,6 +148,7 @@
     </Content>
     <Content Include="Assets\Icons\check.png" />
     <Content Include="Assets\Icons\crop.png" />
+    <Content Include="Assets\Icons\crop_indicator.png" />
     <Content Include="Assets\Icons\flash_auto.png" />
     <Content Include="Assets\Icons\flash_off.png" />
     <Content Include="Assets\Icons\flash_on.png" />
