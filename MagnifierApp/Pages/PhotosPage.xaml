@@ -86,7 +86,7 @@
                                     </toolkit:ContextMenuService.ContextMenu>
                                 </Image>
 
-                                <Image Source="/Assets/Icons/crop_indicator.png" Width="42" Height="42" Margin="-4" IsHitTestVisible="False"
+                                <Image Source="/Assets/Icons/crop_indicator.png" Width="52" Height="52" Margin="-7" IsHitTestVisible="False"
                                        HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="{Binding CropIndicatorVisibility}"/>
                             </Grid>
                         </DataTemplate>
