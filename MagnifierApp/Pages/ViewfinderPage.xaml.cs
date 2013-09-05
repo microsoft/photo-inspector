@@ -124,7 +124,7 @@ namespace MagnifierApp.Pages
 
             if (_photoResult != null)
             {
-                PhotoModel.Singleton.FromNewImage(_photoResult.ChosenPhoto);
+                PhotoModel.Singleton.FromLibraryImage(_photoResult.OriginalFileName, _photoResult.ChosenPhoto);
 
                 if (_picker)
                 {
