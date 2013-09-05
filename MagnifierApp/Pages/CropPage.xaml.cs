@@ -100,7 +100,8 @@ namespace MagnifierApp.Pages
 
             _session.AddFilter(FilterFactory.CreateCropFilter(new Windows.Foundation.Rect(topLeftFoundationPoint, bottomRightFoundationPoint)));
 
-            var task = _session.RenderToJpegAsync().AsTask();
+            var size = new Windows.Foundation.Size(bottomRightFoundationPoint.X - topLeftFoundationPoint.X, bottomRightFoundationPoint.Y - topLeftFoundationPoint.Y);
+            var task = _session.RenderToJpegAsync(size, OutputOption.PreserveAspectRatio, 1.0, OutputColorSpacing.Yuv420).AsTask();
 
             task.Wait();
 
