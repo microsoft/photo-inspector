@@ -35,6 +35,7 @@ namespace MagnifierApp.Pages
         private ApplicationBarIconButton _flashButton = null;
         private bool _focusing = false;
         private bool _capturing = false;
+        private bool _capture = false;
         private PhotoResult _photoResult = null;
         private bool _picker = false;
         private bool _lense = false;
@@ -338,12 +339,26 @@ namespace MagnifierApp.Pages
                 await _device.FocusAsync();
 
                 _focusing = false;
+
+                if (_capture)
+                {
+                    _capture = false;
+
+                    await CaptureAsync();
+                }
             }
         }
 
         private async void CameraButtons_ShutterKeyPressed(object sender, EventArgs e)
         {
-            await CaptureAsync();
+            if (_focusing)
+            {
+                _capture = true;
+            }
+            else
+            {
+                await CaptureAsync();
+            }
         }
 
         private async void Canvas_Tap(object sender, System.Windows.Input.GestureEventArgs e)
