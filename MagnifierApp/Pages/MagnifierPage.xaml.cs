@@ -159,17 +159,19 @@ namespace MagnifierApp
             {
                 var queryString = this.NavigationContext.QueryString;
 
+                string token = null;
+
                 if (queryString.ContainsKey("token"))
                 {
                     _editor = true;
 
-                    PhotoModel.Singleton.FromLibraryImage(queryString["token"]);
+                    token = queryString["token"];
                 }
                 else if (queryString.ContainsKey("FileId"))
                 {
                     _editor = true;
 
-                    PhotoModel.Singleton.FromLibraryImage(queryString["FileId"]);
+                    token = queryString["FileId"];
                 }
                 else if (queryString.ContainsKey("editor"))
                 {
@@ -233,6 +235,11 @@ namespace MagnifierApp
                 aboutMenuItem.Click += AboutMenuItem_Click;
 
                 ApplicationBar.MenuItems.Add(aboutMenuItem);
+
+                if (token != null)
+                {
+                    PhotoModel.Singleton.FromLibraryImage(token);
+                }
             }
 
             _saveButton.IsEnabled = PhotoModel.Singleton.LibraryPath == null;
