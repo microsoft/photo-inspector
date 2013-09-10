@@ -70,7 +70,7 @@ namespace MagnifierApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Capture a photo and slide your finger on the preview to bring up a loupe to zoom right into pixel perfect details in the photo. Crop rectangular areas from photos and save lower resolution copies to the main Photos gallery while retaining the original maximum resolution photos in application local storage for later use - for example for reframing the crop! Share photos as lower resolution copies to online services like Facebook and Twitter..
+        ///   Looks up a localized string similar to Capture a photo and slide your finger on the preview to bring up a loupe to zoom right into pixel perfect details in the photo. Reframe rectangular areas from photos and save lower resolution copies to the main Photos gallery while retaining the original maximum resolution photos in application local storage for later use - for example for reframing the photo! Share photos as lower resolution copies to online services like Facebook and Twitter..
         /// </summary>
         public static string AboutPage_GuideRun_Text {
             get {
