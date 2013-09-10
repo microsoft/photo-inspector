@@ -32,7 +32,6 @@ namespace MagnifierApp
         private CompositeTransform _lowResolutionBrushTransform = new CompositeTransform();
         private BitmapImage _lowResolutionBitmap = new BitmapImage();
         private WriteableBitmap _highResolutionCropBitmap = null;
-        private Point _touchOrigin = new Point(0, 0);
         private PhotoChooserTask _photoChooserTask = new PhotoChooserTask();
         private ShareMediaTask _shareMediaTask = new ShareMediaTask();
         private ApplicationBarIconButton _saveButton = null;
@@ -368,18 +367,12 @@ namespace MagnifierApp
             InformationPanel.Visibility = Visibility.Collapsed;
             Lense.Visibility = Visibility.Visible;
 
-            _touchOrigin = e.ManipulationOrigin;
-
-            Magnificate(_touchOrigin);
+            Magnificate(e.ManipulationOrigin);
         }
 
         private void Image_ManipulationDelta(object sender, ManipulationDeltaEventArgs e)
         {
-            var deltaX = e.CumulativeManipulation.Translation.X;
-            var deltaY = e.CumulativeManipulation.Translation.Y;
-            var currentPoint = new Point(_touchOrigin.X + deltaX, _touchOrigin.Y + deltaY);
-
-            Magnificate(currentPoint);
+            Magnificate(e.ManipulationOrigin);
         }
 
         private void Image_ManipulationCompleted(object sender, ManipulationCompletedEventArgs e)
