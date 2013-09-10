@@ -6,17 +6,16 @@
  * See LICENSE.TXT for license information.
  */
 
+using MagnifierApp.Utilities;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Media.PhoneExtensions;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.IO.IsolatedStorage;
-using System.Windows.Media.Imaging;
 using System.Linq;
-using MagnifierApp.Utilities;
 using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace MagnifierApp.Pages
 {
@@ -141,6 +140,10 @@ namespace MagnifierApp.Pages
 
         private void PopulatePhotos()
         {
+            Photos.Clear();
+
+            var newPhotosCollection = new ObservableCollection<Photo>();
+
             using (var store = IsolatedStorageFile.GetUserStoreForApplication())
             {
                 using (var library = new MediaLibrary())
@@ -160,12 +163,24 @@ namespace MagnifierApp.Pages
                                     var thumbnail = picture.GetThumbnail();
                                     var photo = new Photo(localPath, originalPath, libraryPath, thumbnail);
 
-                                    Photos.Add(photo);
+                                    newPhotosCollection.Add(photo);
                                 }
                             }
                         }
                     }
                 }
+            }
+
+            Func<Photo, string> keySelector = (p) =>
+            {
+                return Mapping.FilenameFromPath(p.LibraryPath);
+            };
+
+            var orderedEnumerable = newPhotosCollection.OrderBy(keySelector);
+
+            foreach (var photo in orderedEnumerable)
+            {
+                Photos.Add(photo);
             }
         }
     }
