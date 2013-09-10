@@ -284,10 +284,10 @@ High resolution photos too large for the Photos library and cropped photos that 
     <value>Software</value>
   </data>
   <data name="CropPage_AcceptButton_Text" xml:space="preserve">
-    <value>crop</value>
+    <value>accept</value>
   </data>
   <data name="MagnifierPage_CropButton_Text" xml:space="preserve">
-    <value>crop</value>
+    <value>reframe</value>
   </data>
   <data name="MagnifierPage_InformationTextBlock_LocalAndOriginalAndLibraryText" xml:space="preserve">
     <value>Local storage (2) + Photo library</value>

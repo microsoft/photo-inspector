@@ -133,7 +133,7 @@ namespace MagnifierApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to crop.
+        ///   Looks up a localized string similar to accept.
         /// </summary>
         public static string CropPage_AcceptButton_Text {
             get {
@@ -286,7 +286,7 @@ namespace MagnifierApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to crop.
+        ///   Looks up a localized string similar to reframe.
         /// </summary>
         public static string MagnifierPage_CropButton_Text {
             get {
