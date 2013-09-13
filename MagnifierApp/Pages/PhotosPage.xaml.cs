@@ -149,7 +149,10 @@ namespace MagnifierApp.Pages
 
         private void CameraButtons_ShutterKeyPressed(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Pages/ViewfinderPage.xaml", UriKind.Relative));
+            if (!_picker)
+            {
+                NavigationService.Navigate(new Uri("/Pages/ViewfinderPage.xaml", UriKind.Relative));
+            }
         }
 
         private void Photos_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
