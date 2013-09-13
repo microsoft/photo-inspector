@@ -383,13 +383,12 @@ namespace MagnifierApp.Models
                 Original = original;
             }
 
-            if (LibraryPath != null)
+            if (OriginalLibraryPath == null)
             {
                 OriginalLibraryPath = LibraryPath;
-
-                LibraryPath = null;
             }
 
+            LibraryPath = null;
             LocalPath = null;
 
             Image = image;
