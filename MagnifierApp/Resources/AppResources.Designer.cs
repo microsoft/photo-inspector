@@ -349,7 +349,7 @@ namespace MagnifierApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Local storage (2) + Photo library.
+        ///   Looks up a localized string similar to Local storage + Photo library.
         /// </summary>
         public static string MagnifierPage_InformationTextBlock_LocalAndOriginalAndLibraryText {
             get {

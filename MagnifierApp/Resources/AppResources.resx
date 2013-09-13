@@ -290,7 +290,7 @@ High resolution photos too large for the Photos library and cropped photos that 
     <value>reframe</value>
   </data>
   <data name="MagnifierPage_InformationTextBlock_LocalAndOriginalAndLibraryText" xml:space="preserve">
-    <value>Local storage (2) + Photo library</value>
+    <value>Local storage + Photo library</value>
   </data>
   <data name="MagnifierPage_InformationTextBlock_OriginalAndLibraryText" xml:space="preserve">
     <value>Local storage + Photo library</value>
