@@ -47,7 +47,7 @@
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot">
         <Grid.Background>
-            <ImageBrush ImageSource="/Assets/ApplicationBackground.png"/>
+            <ImageBrush ImageSource="/Assets/ApplicationBackground.png" Stretch="UniformToFill"/>
         </Grid.Background>
 
         <Grid.RowDefinitions>

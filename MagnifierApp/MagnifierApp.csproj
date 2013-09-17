@@ -160,6 +160,7 @@
     <Content Include="Assets\Lens.Screen-720p.png" />
     <Content Include="Assets\Lens.Screen-WVGA.png" />
     <Content Include="Assets\Lens.Screen-WXGA.png" />
+    <Content Include="SplashScreenImage.Screen-720p.jpg" />
     <Content Include="Assets\Tiles\FlipCycleTileLarge.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
