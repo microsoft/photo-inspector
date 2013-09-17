@@ -46,16 +46,10 @@ namespace MagnifierApp.Pages
 
             // Application guide text
 
-            var guideRun = new Run();
-            
-            if (Information.HighResolutionCaptureSupported)
+            var guideRun = new Run()
             {
-                guideRun.Text = AppResources.AboutPage_GuideRunHighResolution_Text + "\n";
-            }
-            else
-            {
-                guideRun.Text = AppResources.AboutPage_GuideRunLowResolution_Text + "\n";
-            }
+                Text = AppResources.AboutPage_GuideRun_Text + "\n"
+            };
 
             GuideParagraph.Inlines.Add(guideRun);
 

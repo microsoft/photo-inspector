@@ -35,6 +35,10 @@ namespace MagnifierApp.Pages
         private ApplicationBarIconButton _flashButton = null;
         private bool _focusing = false;
         private bool _capturing = false;
+        private bool _capture = false;
+        private PhotoResult _photoResult = null;
+        private bool _picker = false;
+        private bool _lense = false;
 
         #region Properties
 
@@ -45,18 +49,6 @@ namespace MagnifierApp.Pages
             InitializeComponent();
 
             _photoChooserTask.Completed += PhotoChooserTask_Completed;
-
-            // Gallery button
-
-            var pickPhotoButton = new ApplicationBarIconButton()
-            {
-                IconUri = new Uri("/Assets/Icons/folder.png", UriKind.Relative),
-                Text = AppResources.ViewfinderPage_PickPhotoButton_Text
-            };
-
-            pickPhotoButton.Click += PickPhotoButton_Click;
-
-            ApplicationBar.Buttons.Add(pickPhotoButton);
 
             // Flash toggle button
 
@@ -71,18 +63,9 @@ namespace MagnifierApp.Pages
                 _flashButton.Click += FlashButton_Click;
 
                 ApplicationBar.Buttons.Add(_flashButton);
+
+                ApplicationBar.IsVisible = true;
             }
-
-            // About menu item
-
-            var aboutMenuItem = new ApplicationBarMenuItem()
-            {
-                Text = AppResources.ViewFinderPage_AboutMenuItem_Text
-            };
-
-            aboutMenuItem.Click += AboutMenuItem_Click;
-
-            ApplicationBar.MenuItems.Add(aboutMenuItem);
         }
 
         ~ViewfinderPage()
@@ -97,9 +80,67 @@ namespace MagnifierApp.Pages
         {
             base.OnNavigatedTo(e);
 
-            if (PhotoModel.Singleton.Image != null)
+            if (e.NavigationMode == NavigationMode.New)
             {
-                NavigationService.Navigate(new Uri("/Pages/MagnifierPage.xaml", UriKind.Relative));
+                if (NavigationContext.QueryString.ContainsKey("picker"))
+                {
+                    _picker = true;
+                }
+                else
+                {
+                    if (NavigationContext.QueryString.ContainsKey("lense"))
+                    {
+                        _lense = true;
+                    }
+                    else
+                    {
+                        // Gallery button
+
+                        var galleryButton = new ApplicationBarIconButton()
+                        {
+                            IconUri = new Uri("/Assets/Icons/folder.png", UriKind.Relative),
+                            Text = AppResources.ViewfinderPage_GalleryButton_Text
+                        };
+
+                        galleryButton.Click += PickPhotoButton_Click;
+
+                        ApplicationBar.Buttons.Add(galleryButton);
+                    }
+
+                    // About menu item
+
+                    var aboutMenuItem = new ApplicationBarMenuItem()
+                    {
+                        Text = AppResources.ViewFinderPage_AboutMenuItem_Text
+                    };
+
+                    aboutMenuItem.Click += AboutMenuItem_Click;
+
+                    ApplicationBar.MenuItems.Add(aboutMenuItem);
+
+                    ApplicationBar.IsVisible = true;
+                }
+            }
+
+            if (_photoResult != null)
+            {
+                PhotoModel.Singleton.FromLibraryImage(_photoResult.OriginalFileName, _photoResult.ChosenPhoto);
+
+                if (_picker)
+                {
+                    NavigationService.GoBack();
+                }
+                else
+                {
+                    if (_lense)
+                    {
+                        NavigationService.Navigate(new Uri("/Pages/MagnifierPage.xaml?editor", UriKind.Relative));
+                    }
+                    else
+                    {
+                        NavigationService.Navigate(new Uri("/Pages/MagnifierPage.xaml", UriKind.Relative));
+                    }
+                }
             }
             else
             {
@@ -123,6 +164,8 @@ namespace MagnifierApp.Pages
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
+
+            _photoResult = null;
 
             if (_device != null)
             {
@@ -178,12 +221,12 @@ namespace MagnifierApp.Pages
             {
                 if (e.ChosenPhoto.CanRead && e.ChosenPhoto.Length > 0)
                 {
-                    PhotoModel.Singleton.FromLibraryImage(e.OriginalFileName, e.ChosenPhoto);
+                    _photoResult = e;
                 }
                 else
                 {
-                    var result = MessageBox.Show(AppResources.ViewfinderPage_PickPhotoReadErrorMessageBox_Text,
-                        AppResources.ViewfinderPage_PickPhotoReadErrorMessageBox_Caption, MessageBoxButton.OKCancel);
+                    var result = MessageBox.Show(AppResources.ViewfinderPage_GalleryReadErrorMessageBox_Text,
+                        AppResources.ViewfinderPage_GalleryReadErrorMessageBox_Caption, MessageBoxButton.OKCancel);
 
                     if (result.HasFlag(MessageBoxResult.OK))
                     {
@@ -296,12 +339,26 @@ namespace MagnifierApp.Pages
                 await _device.FocusAsync();
 
                 _focusing = false;
+
+                if (_capture)
+                {
+                    _capture = false;
+
+                    await CaptureAsync();
+                }
             }
         }
 
         private async void CameraButtons_ShutterKeyPressed(object sender, EventArgs e)
         {
-            await CaptureAsync();
+            if (_focusing)
+            {
+                _capture = true;
+            }
+            else
+            {
+                await CaptureAsync();
+            }
         }
 
         private async void Canvas_Tap(object sender, System.Windows.Input.GestureEventArgs e)
@@ -408,7 +465,21 @@ namespace MagnifierApp.Pages
                 {
                     PhotoModel.Singleton.FromNewImage(stream);
 
-                    NavigationService.Navigate(new Uri("/Pages/MagnifierPage.xaml", UriKind.Relative));
+                    if (_picker)
+                    {
+                        NavigationService.GoBack();
+                    }
+                    else
+                    {
+                        if (_lense)
+                        {
+                            NavigationService.Navigate(new Uri("/Pages/MagnifierPage.xaml?editor", UriKind.Relative));
+                        }
+                        else
+                        {
+                            NavigationService.Navigate(new Uri("/Pages/MagnifierPage.xaml", UriKind.Relative));
+                        }
+                    }
                 }
                 else
                 {

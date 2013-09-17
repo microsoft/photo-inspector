@@ -128,13 +128,13 @@
   <data name="App_Title_Text" xml:space="preserve">
     <value>PHOTO INSPECTOR</value>
   </data>
-  <data name="MagnifierPage_PickPhotoButton_Text" xml:space="preserve">
-    <value>gallery</value>
+  <data name="MagnifierPage_GalleryMenuItem_Text" xml:space="preserve">
+    <value>photos gallery</value>
   </data>
-  <data name="MagnifierPage_PickPhotoReadErrorMessageBox_Caption" xml:space="preserve">
+  <data name="MagnifierPage_GalleryReadErrorMessageBox_Caption" xml:space="preserve">
     <value>Sorry, unable to read photo:(</value>
   </data>
-  <data name="MagnifierPage_PickPhotoReadErrorMessageBox_Text" xml:space="preserve">
+  <data name="MagnifierPage_GalleryReadErrorMessageBox_Text" xml:space="preserve">
     <value>Photo you selected seems unreadable to me, care to try with another photo?</value>
   </data>
   <data name="MagnifierPage_Title_Text" xml:space="preserve">
@@ -143,16 +143,16 @@
   <data name="ViewfinderPage_CaptureButton_Text" xml:space="preserve">
     <value>capture</value>
   </data>
-  <data name="ViewfinderPage_PickPhotoReadErrorMessageBox_Caption" xml:space="preserve">
+  <data name="ViewfinderPage_GalleryReadErrorMessageBox_Caption" xml:space="preserve">
     <value>Sorry, unable to read photo:(</value>
   </data>
-  <data name="ViewfinderPage_PickPhotoReadErrorMessageBox_Text" xml:space="preserve">
+  <data name="ViewfinderPage_GalleryReadErrorMessageBox_Text" xml:space="preserve">
     <value>Photo you selected seems unreadable to me, care to try with another photo?</value>
   </data>
   <data name="ViewfinderPage_FlashButton_Text" xml:space="preserve">
     <value>flash</value>
   </data>
-  <data name="ViewfinderPage_PickPhotoButton_Text" xml:space="preserve">
+  <data name="ViewfinderPage_GalleryButton_Text" xml:space="preserve">
     <value>gallery</value>
   </data>
   <data name="MagnifierPage_SaveButton_Text" xml:space="preserve">
@@ -199,8 +199,8 @@
   <data name="ViewFinderPage_AboutMenuItem_Text" xml:space="preserve">
     <value>about</value>
   </data>
-  <data name="AboutPage_GuideRunHighResolution_Text" xml:space="preserve">
-    <value>Capture a photo and slide your finger on the preview to bring up a loupe to zoom right into pixel perfect details in the photo. Save a lower resolution copy of the photo to the main Photos gallery while retaining the original maximum resolution photo in application local storage for later use. Share photos as lower resolution copies to online services like Facebook and Twitter.</value>
+  <data name="AboutPage_GuideRun_Text" xml:space="preserve">
+    <value>Capture a photo and slide your finger on the preview to bring up a loupe to zoom right into pixel perfect details in the photo. Reframe rectangular areas from photos and save lower resolution copies to the main Photos gallery while retaining the original maximum resolution photos in application local storage for later use - for example for reframing the photo! Share photos as lower resolution copies to online services like Facebook and Twitter.</value>
   </data>
   <data name="AboutPage_LegalRun_Text" xml:space="preserve">
     <value>Developed and published by Nokia. All rights reserved.</value>
@@ -217,12 +217,10 @@
   <data name="PhotosPage_DeleteMenuItem_Text" xml:space="preserve">
     <value>delete</value>
   </data>
-  <data name="PhotosPage_GuideTextBlock_Text" xml:space="preserve">
-    <value>No high resolution photos in local storage.
+  <data name="PhotosPage_PickerGuideTextBlock_Text" xml:space="preserve">
+    <value>No photos in application local storage.
 
-High resolution photos that you capture with this application are displayed here. To access other existing photos tap the gallery button, or go capturing new photos by tapping the camera button.
-
-Notice that if you delete the corresponding low resolution copies from Photos application's Camera Roll, the high resolution originals in this application will also be deleted automatically (when the Photo Inspector is opened).</value>
+High resolution photos too large for the Photos library and cropped photos that have a locally saved original for later reframing purposes are displayed here.</value>
   </data>
   <data name="PhotosPage_ShareMenuItem_Text" xml:space="preserve">
     <value>share...</value>
@@ -239,7 +237,78 @@ Notice that if you delete the corresponding low resolution copies from Photos ap
   <data name="PhotosPage_DeleteAllMessageBox_Text" xml:space="preserve">
     <value>Delete all high resolution photos saved in Photo Inspector's local storage?</value>
   </data>
-  <data name="AboutPage_GuideRunLowResolution_Text" xml:space="preserve">
-    <value>Capture a photo and slide your finger on the preview to bring up a loupe to zoom right into pixel perfect details in the photo. Save a the photo to the main Photos gallery and share photos to online services like Facebook and Twitter.</value>
+  <data name="InfoPage_GuideTextBlock_Text" xml:space="preserve">
+    <value>This photo does not seem to have any additional information.</value>
+  </data>
+  <data name="InfoPage_Title_Text" xml:space="preserve">
+    <value>photo info</value>
+  </data>
+  <data name="MagnifierPage_InfoButton_Text" xml:space="preserve">
+    <value>info</value>
+  </data>
+  <data name="InfoPage_ApertureTitleTextBlock_Text" xml:space="preserve">
+    <value>Aperture</value>
+  </data>
+  <data name="InfoPage_DateTimeTitleTextBlock_Text" xml:space="preserve">
+    <value>Original date and time</value>
+  </data>
+  <data name="InfoPage_DimensionsTitleTextBlock_Text" xml:space="preserve">
+    <value>Original dimensions</value>
+  </data>
+  <data name="InfoPage_ExposureTimeTitleTextBlock_Text" xml:space="preserve">
+    <value>Exposure time</value>
+  </data>
+  <data name="InfoPage_ExposureTimeValueFormatTextBlock_Text" xml:space="preserve">
+    <value>{0} seconds</value>
+    <comment>{0} is the length of exposure time in seconds with couple of decimals.</comment>
+  </data>
+  <data name="InfoPage_FlashTitleTextBlock_Text" xml:space="preserve">
+    <value>Flash</value>
+  </data>
+  <data name="InfoPage_FlashValueFiredTextBlock_Text" xml:space="preserve">
+    <value>Flash did fire</value>
+  </data>
+  <data name="InfoPage_FlashValueNotFiredTextBlock_Text" xml:space="preserve">
+    <value>Flash did not fire</value>
+  </data>
+  <data name="InfoPage_IsoTitleTextBlock_Text" xml:space="preserve">
+    <value>ISO</value>
+  </data>
+  <data name="InfoPage_MakeTitleTextBlock_Text" xml:space="preserve">
+    <value>Make</value>
+  </data>
+  <data name="InfoPage_ModelTitleTextBlock_Text" xml:space="preserve">
+    <value>Model</value>
+  </data>
+  <data name="InfoPage_SoftwareTitleTextBlock_Text" xml:space="preserve">
+    <value>Software</value>
+  </data>
+  <data name="CropPage_AcceptButton_Text" xml:space="preserve">
+    <value>accept</value>
+  </data>
+  <data name="MagnifierPage_CropButton_Text" xml:space="preserve">
+    <value>reframe</value>
+  </data>
+  <data name="MagnifierPage_InformationTextBlock_LocalAndOriginalAndLibraryText" xml:space="preserve">
+    <value>Local storage + Photo library</value>
+  </data>
+  <data name="MagnifierPage_InformationTextBlock_OriginalAndLibraryText" xml:space="preserve">
+    <value>Local storage + Photo library</value>
+  </data>
+  <data name="MagnifierPage_CameraMenuItem_Text" xml:space="preserve">
+    <value>camera</value>
+  </data>
+  <data name="MagnifierPage_PhotosMenuItem_Text" xml:space="preserve">
+    <value>local photos</value>
+  </data>
+  <data name="MagnifierPage_RevertMenuItem_Text" xml:space="preserve">
+    <value>revert to original</value>
+  </data>
+  <data name="PhotosPage_StandaloneGuideTextBlock_Text" xml:space="preserve">
+    <value>No photos in application local storage.
+
+High resolution photos too large for the Photos library and cropped photos that have a locally saved original for later reframing purposes are displayed here. To access other photos tap the gallery button, or go capturing new photos by tapping the camera button.
+
+Notice that if you delete the corresponding photo copies from the Photos application's Camera Roll, the corresponding locally saved photos in this application will also be deleted automatically when the Photo Inspector is next time opened.</value>
   </data>
 </root>

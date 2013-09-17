@@ -77,6 +77,13 @@
     <Compile Include="Pages\AboutPage.xaml.cs">
       <DependentUpon>AboutPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\CropPage.xaml.cs">
+      <DependentUpon>CropPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\InfoPage.xaml.cs">
+      <DependentUpon>InfoPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\InfoPageViewModel.cs" />
     <Compile Include="Pages\MagnifierPage.xaml.cs">
       <DependentUpon>MagnifierPage.xaml</DependentUpon>
     </Compile>
@@ -95,6 +102,7 @@
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Utilities\Information.cs" />
+    <Compile Include="Utilities\Mapping.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -102,6 +110,14 @@
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
     <Page Include="Pages\AboutPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\CropPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\InfoPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -130,16 +146,21 @@
     <Content Include="Assets\ApplicationIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Icons\check.png" />
+    <Content Include="Assets\Icons\crop.png" />
+    <Content Include="Assets\Icons\crop_indicator.png" />
     <Content Include="Assets\Icons\flash_auto.png" />
     <Content Include="Assets\Icons\flash_off.png" />
     <Content Include="Assets\Icons\flash_on.png" />
     <Content Include="Assets\Icons\camera.png" />
     <Content Include="Assets\Icons\folder.png" />
+    <Content Include="Assets\Icons\info.png" />
     <Content Include="Assets\Icons\save.png" />
     <Content Include="Assets\Icons\share.png" />
     <Content Include="Assets\Lens.Screen-720p.png" />
     <Content Include="Assets\Lens.Screen-WVGA.png" />
     <Content Include="Assets\Lens.Screen-WXGA.png" />
+    <Content Include="SplashScreenImage.Screen-720p.jpg" />
     <Content Include="Assets\Tiles\FlipCycleTileLarge.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -157,6 +178,9 @@
     <Content Include="Toolkit.Content\ApplicationBar.Select.png" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="ExifLib">
+      <HintPath>..\packages\ExifLib.1.4.5.0\lib\sl3-wp\ExifLib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Phone.Controls.Toolkit">
       <HintPath>..\packages\WPToolkit.4.2013.06.11\lib\wp8\Microsoft.Phone.Controls.Toolkit.dll</HintPath>
     </Reference>

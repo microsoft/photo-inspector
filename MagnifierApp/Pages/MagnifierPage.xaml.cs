@@ -32,7 +32,6 @@ namespace MagnifierApp
         private CompositeTransform _lowResolutionBrushTransform = new CompositeTransform();
         private BitmapImage _lowResolutionBitmap = new BitmapImage();
         private WriteableBitmap _highResolutionCropBitmap = null;
-        private Point _touchOrigin = new Point(0, 0);
         private PhotoChooserTask _photoChooserTask = new PhotoChooserTask();
         private ShareMediaTask _shareMediaTask = new ShareMediaTask();
         private ApplicationBarIconButton _saveButton = null;
@@ -40,6 +39,8 @@ namespace MagnifierApp
         private Point _lastLenseCenterForRendering = new Point(0, 0);
         private bool _renderingLenseContent = false;
         private bool _saving = false;
+        private bool _editor = false;
+        private ApplicationBarMenuItem _revertMenuItem = null;
 
         public MagnifierPage()
         {
@@ -48,18 +49,6 @@ namespace MagnifierApp
             _photoChooserTask.Completed += PhotoChooserTask_Completed;
 
             PhotoModel.Singleton.PropertyChanged += PhotoModel_PropertyChanged;
-
-            // Gallery button
-
-            var pickPhotoButton = new ApplicationBarIconButton()
-            {
-                IconUri = new Uri("/Assets/Icons/folder.png", UriKind.Relative),
-                Text = AppResources.MagnifierPage_PickPhotoButton_Text
-            };
-
-            pickPhotoButton.Click += PickPhotoButton_Click;
-
-            ApplicationBar.Buttons.Add(pickPhotoButton);
 
             // Save button
 
@@ -73,6 +62,30 @@ namespace MagnifierApp
 
             ApplicationBar.Buttons.Add(_saveButton);
 
+            // Crop button
+
+            var cropButton = new ApplicationBarIconButton()
+            {
+                IconUri = new Uri("/Assets/Icons/crop.png", UriKind.Relative),
+                Text = AppResources.MagnifierPage_CropButton_Text
+            };
+
+            cropButton.Click += CropButton_Click;
+
+            ApplicationBar.Buttons.Add(cropButton);
+
+            // Info button
+
+            var infoButton = new ApplicationBarIconButton()
+            {
+                IconUri = new Uri("/Assets/Icons/info.png", UriKind.Relative),
+                Text = AppResources.MagnifierPage_InfoButton_Text
+            };
+
+            infoButton.Click += InfoButton_Click;
+
+            ApplicationBar.Buttons.Add(infoButton);
+
             // Share button
 
             var shareButton = new ApplicationBarIconButton()
@@ -84,17 +97,6 @@ namespace MagnifierApp
             shareButton.Click += ShareButton_Click;
 
             ApplicationBar.Buttons.Add(shareButton);
-
-            // About menu item
-
-            var aboutMenuItem = new ApplicationBarMenuItem()
-            {
-                Text = AppResources.MagnifierPage_AboutMenuItem_Text
-            };
-
-            aboutMenuItem.Click += AboutMenuItem_Click;
-
-            ApplicationBar.MenuItems.Add(aboutMenuItem);
 
             // Lense is positioned to current touch point with _lenseTransform
             Lense.RenderTransform = _lenseTransform;
@@ -124,42 +126,125 @@ namespace MagnifierApp
 
         private void PhotoModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == PhotoModel.LocalPathPropertyName || e.PropertyName == PhotoModel.LibraryPathPropertyName)
+            if (e.PropertyName == PhotoModel.LocalPathPropertyName ||
+                e.PropertyName == PhotoModel.LibraryPathPropertyName ||
+                e.PropertyName == PhotoModel.OriginalPathPropertyName)
             {
-                // Disable save button if photo already exists in library
-                _saveButton.IsEnabled = PhotoModel.Singleton.LibraryPath == null;
-
                 // Source information for photo may have changed, update information panel
                 SetupInformationPanel();
             }
+            else if (e.PropertyName == PhotoModel.ImagePropertyName)
+            {
+                EndSession();
+
+                if (PhotoModel.Singleton.Image != null)
+                {
+                    BeginSession(PhotoModel.Singleton.Image);
+                }
+            }
+
+            // Disable save button if photo already exists in library
+            _saveButton.IsEnabled = PhotoModel.Singleton.LibraryPath == null;
+
+            // Enable revert to original button if there is an original to revert to
+            _revertMenuItem.IsEnabled = PhotoModel.Singleton.Original != null;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
-            Microsoft.Devices.CameraButtons.ShutterKeyPressed += CameraButtons_ShutterKeyPressed;
-
-            var queryString = this.NavigationContext.QueryString;
-
-            if (PhotoModel.Singleton.Image == null)
+            if (e.NavigationMode == NavigationMode.New)
             {
+                var queryString = this.NavigationContext.QueryString;
+
+                string token = null;
+
                 if (queryString.ContainsKey("token"))
                 {
-                    PhotoModel.Singleton.FromLibraryImage(queryString["token"]);
+                    _editor = true;
+
+                    token = queryString["token"];
                 }
                 else if (queryString.ContainsKey("FileId"))
                 {
-                    PhotoModel.Singleton.FromLibraryImage(queryString["FileId"]);
+                    _editor = true;
+
+                    token = queryString["FileId"];
+                }
+                else if (queryString.ContainsKey("editor"))
+                {
+                    _editor = true;
+                }
+
+                if (!_editor)
+                {
+                    // Camera menu item
+
+                    var cameraMenuItem = new ApplicationBarMenuItem()
+                    {
+                        Text = AppResources.MagnifierPage_CameraMenuItem_Text
+                    };
+
+                    cameraMenuItem.Click += CameraMenuItem_Click;
+
+                    ApplicationBar.MenuItems.Add(cameraMenuItem);
+
+                    // Gallery menu item
+
+                    var galleryMenuItem = new ApplicationBarMenuItem()
+                    {
+                        Text = AppResources.MagnifierPage_GalleryMenuItem_Text
+                    };
+
+                    galleryMenuItem.Click += GalleryMenuItem_Click;
+
+                    ApplicationBar.MenuItems.Add(galleryMenuItem);
+
+                    // Local photos menu item
+
+                    var photosMenuItem = new ApplicationBarMenuItem()
+                    {
+                        Text = AppResources.MagnifierPage_PhotosMenuItem_Text
+                    };
+
+                    photosMenuItem.Click += PhotosMenuItem_Click;
+
+                    ApplicationBar.MenuItems.Add(photosMenuItem);
+                }
+
+                // Revert menu item
+
+                _revertMenuItem = new ApplicationBarMenuItem()
+                {
+                    Text = AppResources.MagnifierPage_RevertMenuItem_Text
+                };
+
+                _revertMenuItem.Click += RevertMenuItem_Click;
+
+                ApplicationBar.MenuItems.Add(_revertMenuItem);
+
+                // About menu item
+
+                var aboutMenuItem = new ApplicationBarMenuItem()
+                {
+                    Text = AppResources.MagnifierPage_AboutMenuItem_Text
+                };
+
+                aboutMenuItem.Click += AboutMenuItem_Click;
+
+                ApplicationBar.MenuItems.Add(aboutMenuItem);
+
+                if (token != null)
+                {
+                    PhotoModel.Singleton.FromLibraryImage(token);
                 }
             }
 
             _saveButton.IsEnabled = PhotoModel.Singleton.LibraryPath == null;
+            _revertMenuItem.IsEnabled = PhotoModel.Singleton.Original != null;
 
-            if (PhotoModel.Singleton.Image != null)
-            {
-                BeginSession(PhotoModel.Singleton.Image);
-            }
+            BeginSession(PhotoModel.Singleton.Image);
         }
 
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
@@ -175,8 +260,6 @@ namespace MagnifierApp
         protected override void OnNavigatedFrom(System.Windows.Navigation.NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
-
-            Microsoft.Devices.CameraButtons.ShutterKeyPressed -= CameraButtons_ShutterKeyPressed;
 
             EndSession();
 
@@ -248,13 +331,17 @@ namespace MagnifierApp
 
         private void SetupInformationPanel()
         {
-            if (PhotoModel.Singleton.LocalPath != null && PhotoModel.Singleton.LibraryPath != null)
+            if (PhotoModel.Singleton.LocalPath != null && PhotoModel.Singleton.OriginalPath != null && PhotoModel.Singleton.LibraryPath != null)
+            {
+                InformationTextBlock.Text = AppResources.MagnifierPage_InformationTextBlock_LocalAndOriginalAndLibraryText;
+            }
+            else if (PhotoModel.Singleton.OriginalPath != null && PhotoModel.Singleton.LibraryPath != null)
+            {
+                InformationTextBlock.Text = AppResources.MagnifierPage_InformationTextBlock_OriginalAndLibraryText;
+            }
+            else if (PhotoModel.Singleton.LocalPath != null && PhotoModel.Singleton.LibraryPath != null)
             {
                 InformationTextBlock.Text = AppResources.MagnifierPage_InformationTextBlock_LocalAndLibraryText;
-            }
-            else if (PhotoModel.Singleton.LocalPath != null)
-            {
-                InformationTextBlock.Text = AppResources.MagnifierPage_InformationTextBlock_LocalText;
             }
             else if (PhotoModel.Singleton.LibraryPath != null)
             {
@@ -280,18 +367,12 @@ namespace MagnifierApp
             InformationPanel.Visibility = Visibility.Collapsed;
             Lense.Visibility = Visibility.Visible;
 
-            _touchOrigin = e.ManipulationOrigin;
-
-            Magnificate(_touchOrigin);
+            Magnificate(e.ManipulationOrigin);
         }
 
         private void Image_ManipulationDelta(object sender, ManipulationDeltaEventArgs e)
         {
-            var deltaX = e.CumulativeManipulation.Translation.X;
-            var deltaY = e.CumulativeManipulation.Translation.Y;
-            var currentPoint = new Point(_touchOrigin.X + deltaX, _touchOrigin.Y + deltaY);
-
-            Magnificate(currentPoint);
+            Magnificate(e.ManipulationOrigin);
         }
 
         private void Image_ManipulationCompleted(object sender, ManipulationCompletedEventArgs e)
@@ -299,16 +380,6 @@ namespace MagnifierApp
             HighResolutionCropImage.Visibility = Visibility.Collapsed;
             Lense.Visibility = Visibility.Collapsed;
             InformationPanel.Visibility = Visibility.Visible;
-        }
-
-        private void CameraButtons_ShutterKeyPressed(object sender, EventArgs e)
-        {
-            NavigationService.GoBack();
-        }
-
-        private void PickPhotoButton_Click(object sender, EventArgs e)
-        {
-            _photoChooserTask.Show();
         }
 
         private async void SaveButton_Click(object sender, EventArgs e)
@@ -366,6 +437,36 @@ namespace MagnifierApp
             }
         }
 
+        private void InfoButton_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Pages/InfoPage.xaml", UriKind.Relative));
+        }
+
+        private void CropButton_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Pages/CropPage.xaml", UriKind.Relative));
+        }
+
+        private void CameraMenuItem_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Pages/ViewfinderPage.xaml?picker", UriKind.Relative));
+        }
+        
+        private void GalleryMenuItem_Click(object sender, EventArgs e)
+        {
+            _photoChooserTask.Show();
+        }
+
+        private void PhotosMenuItem_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Pages/PhotosPage.xaml?picker", UriKind.Relative));
+        }
+
+        private void RevertMenuItem_Click(object sender, EventArgs e)
+        {
+            PhotoModel.Singleton.RevertOriginal();
+        }
+
         private void AboutMenuItem_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/Pages/AboutPage.xaml", UriKind.Relative));
@@ -383,8 +484,8 @@ namespace MagnifierApp
                 }
                 else
                 {
-                    var result = MessageBox.Show(AppResources.MagnifierPage_PickPhotoReadErrorMessageBox_Text,
-                        AppResources.MagnifierPage_PickPhotoReadErrorMessageBox_Caption, MessageBoxButton.OKCancel);
+                    var result = MessageBox.Show(AppResources.MagnifierPage_GalleryReadErrorMessageBox_Text,
+                        AppResources.MagnifierPage_GalleryReadErrorMessageBox_Caption, MessageBoxButton.OKCancel);
 
                     if (result.HasFlag(MessageBoxResult.OK))
                     {
