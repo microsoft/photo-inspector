@@ -283,6 +283,12 @@ namespace MagnifierApp.Models
                         Original = store.OpenFile(OriginalPath, FileMode.Open);
                     }
                 }
+                else
+                {
+                    Original = null;
+                }
+
+                OriginalLibraryPath = null;
             }
             else
             {
@@ -326,6 +332,12 @@ namespace MagnifierApp.Models
                                 Original = store.OpenFile(OriginalPath, FileMode.Open);
                             }
                         }
+                        else
+                        {
+                            Original = null;
+                        }
+
+                        OriginalLibraryPath = null;
                     }
                 }
             }
@@ -351,6 +363,12 @@ namespace MagnifierApp.Models
                         Original = store.OpenFile(OriginalPath, FileMode.Open);
                     }
                 }
+                else
+                {
+                    Original = null;
+                }
+
+                OriginalLibraryPath = null;
             }
             else
             {
@@ -367,6 +385,7 @@ namespace MagnifierApp.Models
             LibraryPath = null;
             LocalPath = null;
             OriginalPath = null;
+            OriginalLibraryPath = null;
         }
 
         public void FromNewCrop(Stream image)
