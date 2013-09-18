@@ -250,10 +250,10 @@ High resolution photos too large for the Photos library and cropped photos that 
     <value>Aperture</value>
   </data>
   <data name="InfoPage_DateTimeTitleTextBlock_Text" xml:space="preserve">
-    <value>Original date and time</value>
+    <value>Date and time</value>
   </data>
   <data name="InfoPage_DimensionsTitleTextBlock_Text" xml:space="preserve">
-    <value>Original dimensions</value>
+    <value>Dimensions</value>
   </data>
   <data name="InfoPage_ExposureTimeTitleTextBlock_Text" xml:space="preserve">
     <value>Exposure time</value>

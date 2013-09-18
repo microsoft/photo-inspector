@@ -151,7 +151,7 @@ namespace MagnifierApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Original date and time.
+        ///   Looks up a localized string similar to Date and time.
         /// </summary>
         public static string InfoPage_DateTimeTitleTextBlock_Text {
             get {
@@ -160,7 +160,7 @@ namespace MagnifierApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Original dimensions.
+        ///   Looks up a localized string similar to Dimensions.
         /// </summary>
         public static string InfoPage_DimensionsTitleTextBlock_Text {
             get {
