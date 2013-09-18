@@ -185,13 +185,13 @@
       <HintPath>..\packages\WPToolkit.4.2013.06.11\lib\wp8\Microsoft.Phone.Controls.Toolkit.dll</HintPath>
     </Reference>
     <Reference Include="Nokia.Graphics.Imaging">
-      <HintPath>..\NokiaImageEditingSDK\$(Platform)\Nokia.Graphics.Imaging.winmd</HintPath>
+      <HintPath>..\NokiaImagingSDK\$(Platform)\Nokia.Graphics.Imaging.winmd</HintPath>
     </Reference>
     <Reference Include="Nokia.Graphics.Imaging.Managed">
-      <HintPath>..\NokiaImageEditingSDK\Nokia.Graphics.Imaging.Managed.dll</HintPath>
+      <HintPath>..\NokiaImagingSDK\$(Platform)\Nokia.Graphics.Imaging.Managed.dll</HintPath>
     </Reference>
     <Reference Include="Nokia.InteropServices.WindowsRuntime">
-      <HintPath>..\NokiaImageEditingSDK\$(Platform)\Nokia.InteropServices.WindowsRuntime.winmd</HintPath>
+      <HintPath>..\NokiaImagingSDK\$(Platform)\Nokia.InteropServices.WindowsRuntime.winmd</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

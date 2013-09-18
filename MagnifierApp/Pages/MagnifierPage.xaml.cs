@@ -13,8 +13,10 @@ using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
 using Nokia.Graphics.Imaging;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -35,12 +37,17 @@ namespace MagnifierApp
         private PhotoChooserTask _photoChooserTask = new PhotoChooserTask();
         private ShareMediaTask _shareMediaTask = new ShareMediaTask();
         private ApplicationBarIconButton _saveButton = null;
-        private EditingSession _session = null;
         private Point _lastLenseCenterForRendering = new Point(0, 0);
         private bool _renderingLenseContent = false;
         private bool _saving = false;
         private bool _editor = false;
         private ApplicationBarMenuItem _revertMenuItem = null;
+
+        private BufferImageSource _source = null;
+        private ImageProviderInfo _info = null;
+        private WriteableBitmapRenderer _renderer = null;
+        private CropFilter _cropFilter = null;
+        private FilterEffect _filterEffect = null;
 
         public MagnifierPage()
         {
@@ -271,7 +278,7 @@ namespace MagnifierApp
 
         private void BeginSession(Stream image)
         {
-            // Initialize _session with image
+            // Initialize session with image
 
             using (var memoryStream = new MemoryStream())
             {
@@ -290,11 +297,32 @@ namespace MagnifierApp
 
                 memoryStream.Position = 0;
 
-                _session = new EditingSession(memoryStream.GetWindowsRuntimeBuffer());
+                // Initialize image source
+
+                _source = new BufferImageSource(memoryStream.GetWindowsRuntimeBuffer());
+
+                // Get image info
+
+                Task.Run(async () => { _info = await _source.GetInfoAsync(); }).Wait();
+
+                // Create crop filter effect
+
+                _cropFilter = new CropFilter();
+
+                _filterEffect = new FilterEffect(_source)
+                {
+                    Filters = new List<IFilter>() { _cropFilter }
+                };
+
+                Task.Run(async () => { await _filterEffect.PreloadAsync(); }).Wait();
+
+                // Create renderer
+
+                _renderer = new WriteableBitmapRenderer(_filterEffect, _highResolutionCropBitmap);
             }
 
             // Set _lowResolutionBitmap decoding to a quite low resolution and initialize it with image
-            if (_session.Dimensions.Width >= _session.Dimensions.Height)
+            if (_info.ImageSize.Width >= _info.ImageSize.Height)
             {
                 _lowResolutionBitmap.DecodePixelWidth = 1536;
                 _lowResolutionBitmap.DecodePixelHeight = 0;
@@ -311,7 +339,7 @@ namespace MagnifierApp
 
             // Set LowResolutionCropBrush scaling so that it matches with the pixel perfect HighResolutionCropImage renderings
             var screenScaleFactor = App.Current.Host.Content.ScaleFactor / 100.0;
-            var lowResolutionToHighResolutionCropScale = _session.Dimensions.Width / _lowResolutionBitmap.PixelWidth / screenScaleFactor * DIGITAL_MAGNIFICATION;
+            var lowResolutionToHighResolutionCropScale = _info.ImageSize.Width / _lowResolutionBitmap.PixelWidth / screenScaleFactor * DIGITAL_MAGNIFICATION;
 
             _lowResolutionBrushTransform.ScaleX = lowResolutionToHighResolutionCropScale;
             _lowResolutionBrushTransform.ScaleY = lowResolutionToHighResolutionCropScale;
@@ -322,11 +350,25 @@ namespace MagnifierApp
 
         private void EndSession()
         {
-            if (_session != null)
+            if (_renderer != null)
             {
-                _session.Dispose();
-                _session = null;
+                _renderer.Dispose();
+                _renderer = null;
             }
+            if (_filterEffect != null)
+            {
+                _filterEffect.Dispose();
+                _filterEffect = null;
+            }
+
+            if (_source != null)
+            {
+                _source.Dispose();
+                _source = null;
+            }
+
+            _cropFilter = null;
+            _info = null;
         }
 
         private void SetupInformationPanel()
@@ -352,9 +394,9 @@ namespace MagnifierApp
                 InformationTextBlock.Text = AppResources.MagnifierPage_InformationTextBlock_UnsavedText;
             }
 
-            if (_session != null)
+            if (_source != null)
             {
-                ResolutionTextBlock.Text = String.Format("{0} x {1}", _session.Dimensions.Width, _session.Dimensions.Height);
+                ResolutionTextBlock.Text = String.Format("{0} x {1}", _info.ImageSize.Width, _info.ImageSize.Height);
             }
             else
             {
@@ -555,7 +597,7 @@ namespace MagnifierApp
                     center = _lastLenseCenterForRendering;
 
                     // Scale between the rendered image element and the bitmap displayed in it
-                    var previewToHighResolutionCropScale = _session.Dimensions.Width / PreviewImage.ActualWidth;
+                    var previewToHighResolutionCropScale = _info.ImageSize.Width / PreviewImage.ActualWidth;
                     var screenScaleFactor = App.Current.Host.Content.ScaleFactor / 100.0;
 
                     // Find crop area top left coordinate in the actual high resolution image
@@ -569,11 +611,9 @@ namespace MagnifierApp
                     var topLeft = new Windows.Foundation.Point(topLeftX, topLeftY);
                     var bottomRight = new Windows.Foundation.Point(bottomRightX, bottomRightY);
 
-                    _session.AddFilter(FilterFactory.CreateCropFilter(new Windows.Foundation.Rect(topLeft, bottomRight)));
+                    _cropFilter.CropArea = new Windows.Foundation.Rect(topLeft, bottomRight);
 
-                    await _session.RenderToWriteableBitmapAsync(_highResolutionCropBitmap);
-
-                    _session.Undo();
+                    await _renderer.RenderAsync();
                 }
                 while (_lastLenseCenterForRendering != center);
 
