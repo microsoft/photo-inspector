@@ -184,14 +184,8 @@
     <Reference Include="Microsoft.Phone.Controls.Toolkit">
       <HintPath>..\packages\WPToolkit.4.2013.06.11\lib\wp8\Microsoft.Phone.Controls.Toolkit.dll</HintPath>
     </Reference>
-    <Reference Include="Nokia.Graphics.Imaging">
-      <HintPath>..\NokiaImagingSDK\$(Platform)\Nokia.Graphics.Imaging.winmd</HintPath>
-    </Reference>
     <Reference Include="Nokia.Graphics.Imaging.Managed">
-      <HintPath>..\NokiaImagingSDK\$(Platform)\Nokia.Graphics.Imaging.Managed.dll</HintPath>
-    </Reference>
-    <Reference Include="Nokia.InteropServices.WindowsRuntime">
-      <HintPath>..\NokiaImagingSDK\$(Platform)\Nokia.InteropServices.WindowsRuntime.winmd</HintPath>
+      <HintPath>..\packages\NokiaImagingSDK.0.10.0\lib\wp8\Nokia.Graphics.Imaging.Managed.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -211,4 +205,5 @@
   </Target>
   -->
   <ProjectExtensions />
+  <Import Project="..\packages\NokiaImagingSDK.0.10.0\build\wp8\NokiaImagingSDK.targets" Condition="Exists('..\packages\NokiaImagingSDK.0.10.0\build\wp8\NokiaImagingSDK.targets')" />
 </Project>
