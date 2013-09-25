@@ -43,7 +43,7 @@ namespace MagnifierApp
         private bool _editor = false;
         private ApplicationBarMenuItem _revertMenuItem = null;
 
-        private BufferImageSource _source = null;
+        private StreamImageSource _source = null;
         private ImageProviderInfo _info = null;
         private WriteableBitmapRenderer _renderer = null;
         private CropFilter _cropFilter = null;
@@ -299,7 +299,7 @@ namespace MagnifierApp
 
                 // Initialize image source
 
-                _source = new BufferImageSource(memoryStream.GetWindowsRuntimeBuffer());
+                _source = new StreamImageSource(memoryStream);
 
                 // Get image info
 
@@ -313,8 +313,6 @@ namespace MagnifierApp
                 {
                     Filters = new List<IFilter>() { _cropFilter }
                 };
-
-                Task.Run(async () => { await _filterEffect.PreloadAsync(); }).Wait();
 
                 // Create renderer
 
