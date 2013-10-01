@@ -46,6 +46,7 @@ to run the application on your Windows Phone 8 device.
   file.
 * `MagnifierApp`: Root folder for the implementation files.  
 * `Assets`: Graphic assets like icons and tiles.
+* `Pages`: Phone application pages.
 * `Models`: Photo load and save model.
 * `Properties`: Application property files.
 * `Resources`: Application resources.
@@ -60,6 +61,8 @@ to run the application on your Windows Phone 8 device.
 | `Pages/ViewfinderPage.xaml(.cs)` | Simple viewfinder for capturing photos. |
 | `Pages/MagnifierPage.xaml(.cs)` | Photo preview and touch-to-zoom photo detail inspection loupe. |
 | `Pages/PhotosPage.xaml(.cs)` | Shows locally saved high resolution photos on high resolution capable devices. |
+| `Pages/CropPage.xaml(.cs)` | Allows user to crop the photo. Pan & pinch zoom functionality. |
+| `Pages/InfoPage.xaml(.cs)` | Displays selected EXIF records for current photo. |
 
 3.3 Used Nokia Image Editing APIs
 ---------------------------------
@@ -131,4 +134,5 @@ None.
 8. Version history
 -------------------------------------------------------------------------------
 
-* 1.0.0.0: First public release of Photo Inspector
+* 1.1: Second public release of Photo Inspector
+* 1.0: First public release of Photo Inspector
