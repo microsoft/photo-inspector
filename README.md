@@ -16,8 +16,7 @@ tested to work on Nokia Lumia devices with Windows Phone 8.
 This example application is hosted in GitHub:
 https://github.com/nokia-developer/photo-inspector
 
-For more information on implementation, visit Nokia Lumia
-Developer's Library:
+For more information on implementation, visit Nokia Lumia Developer's Library:
 http://developer.nokia.com/Resources/Library/Lumia/#!imaging/working-with-high-resolution-photos/photo-inspector.html
 
 
@@ -33,7 +32,7 @@ to run the application on your Windows Phone 8 device.
 
 * C# basics
 * Windows 8
-* Development environment Microsoft Visual Studio Express for Windows Phone 2012
+* Microsoft Visual Studio Express for Windows Phone 2012
 
 
 3. Project structure and implementation
@@ -64,18 +63,13 @@ to run the application on your Windows Phone 8 device.
 | `Pages/CropPage.xaml(.cs)` | Allows user to crop the photo. Pan & pinch zoom functionality. |
 | `Pages/InfoPage.xaml(.cs)` | Displays selected EXIF records for current photo. |
 
-3.3 Used Nokia Image Editing APIs
----------------------------------
-
-* Nokia.Graphics.Imaging
-
 
 4. Compatibility
 -------------------------------------------------------------------------------
 
 Application works on Windows Phone 8.
 
-Tested to work on Nokia Lumia EOS, Nokia Lumia 925, Nokia Lumia 920,
+Tested to work on Nokia Lumia 1020, Nokia Lumia 925, Nokia Lumia 920,
 Nokia Lumia 620, Nokia Lumia 520.
 
 Developed with Microsoft Visual Studio Express for Windows Phone 2012.
@@ -122,17 +116,31 @@ http://msdn.microsoft.com/library/windowsphone/develop/ff402565(v=vs.105).aspx
 6. License
 -------------------------------------------------------------------------------
 
-See the license text file delivered with this project.
+See the license text file delivered with this project:
+https://github.com/nokia-developer/photo-inspector/blob/master/License.txt
 
 
 7. Related documentation
 -------------------------------------------------------------------------------
 
-None.
+See http://developer.nokia.com/Resources/Library/Lumia/#!imaging/working-with-high-resolution-photos/photo-inspector.html 
+for more information on the project.
+
+See http://developer.nokia.com/Resources/Library/Lumia/#!imaging/working-with-high-resolution-photos.html
+for information on how to capture and handle high resolution photos for example on
+Nokia Lumia 1020.
 
 
 8. Version history
 -------------------------------------------------------------------------------
 
 * 1.1: Second public release of Photo Inspector
+  - Photos can be cropped, and it's possible to either change the framing again or to revert to the original uncropped photo
+  - New photo information page for displaying EXIF information
+  - Locally saved photos are displayed on all devices, not just high camera resolution devices
+  - Camera and locally saved photos can be accessed from the magnification page
+  - Fixed issue where pressing the camera HW button did not capture an image if camera was focusing at the same time
+  - Locally saved photos page shows a "reframed" indicator on photos that are crops
+  - Also included are a number of other minor changes
+
 * 1.0: First public release of Photo Inspector
