@@ -238,6 +238,25 @@ namespace MagnifierApp.Pages
 
         private void AdaptToOrientation()
         {
+            if (App.Current.Host.Content.ScaleFactor == 100)
+            {
+                // WVGA
+                Canvas.Width = 800;
+                FreezeImage.Width = 800;
+            }
+            else if (App.Current.Host.Content.ScaleFactor == 160)
+            {
+                // WXGA
+                Canvas.Width = 800;
+                FreezeImage.Width = 800;
+            }
+            else if (App.Current.Host.Content.ScaleFactor == 150)
+            {
+                // 720p
+                Canvas.Width = 853;
+                FreezeImage.Width = 853;
+            }
+
             double canvasAngle;
 
             if (Orientation.HasFlag(PageOrientation.LandscapeLeft))
@@ -302,7 +321,7 @@ namespace MagnifierApp.Pages
                 SetFlashState(_flashState);
             }
 
-            AdaptToOrientation();
+            AdaptToOrientation();  
 
             ViewfinderVideoBrush.SetSource(_device);
 
