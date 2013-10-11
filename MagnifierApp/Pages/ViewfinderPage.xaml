@@ -46,7 +46,7 @@
 
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <Grid x:Name="ContentPanel">
-            <Canvas x:Name="Canvas" Tap="Canvas_Tap" Width="800" Height="480"
+            <Canvas x:Name="Canvas" Tap="Canvas_Tap" Height="480"
                     HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Canvas.Background>
                     <VideoBrush x:Name="ViewfinderVideoBrush" Stretch="Uniform"/>
@@ -57,7 +57,7 @@
                         Visibility="Collapsed" CornerRadius="360"/>
 
                 <Image x:Name="FreezeImage" Visibility="Collapsed" Stretch="Uniform"
-                       Width="800" Height="480"/>
+                       Height="480"/>
             </Canvas>
         </Grid>
         
