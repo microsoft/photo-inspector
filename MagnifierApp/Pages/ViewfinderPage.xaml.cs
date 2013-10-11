@@ -277,8 +277,13 @@ namespace MagnifierApp.Pages
 
             if (deviceName.Contains("RM-875") || deviceName.Contains("RM-876") || deviceName.Contains("RM-877"))
             {
-                captureResolution = new Windows.Foundation.Size(7712, 4352);
-                //captureResolution = new Windows.Foundation.Size(7136, 5360);
+                captureResolution = new Windows.Foundation.Size(7712, 4352); // 16:9
+                //captureResolution = new Windows.Foundation.Size(7136, 5360); // 4:3
+            }
+            else if (deviceName.Contains("RM-937") || deviceName.Contains("RM-938") || deviceName.Contains("RM-939"))
+            {
+                captureResolution = new Windows.Foundation.Size(5376, 3024); // 16:9
+                //captureResolution = new Windows.Foundation.Size(4992, 3744); // 4:3
             }
             else
             {
