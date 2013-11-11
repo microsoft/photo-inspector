@@ -135,29 +135,47 @@ namespace MagnifierApp.Pages
         {
             // Initialize session with image
 
-            image.Position = 0;
-
-            _source = new StreamImageSource(image);
-
-            // Get image info
-
-            Task.Run(async () => { _info = await _source.GetInfoAsync(); }).Wait();
-
-            // Set _lowResolutionBitmap decoding to a quite low resolution and initialize it with image
-            if (_info.ImageSize.Width >= _info.ImageSize.Height)
+            using (var memoryStream = new MemoryStream())
             {
-                _bitmap.DecodePixelWidth = 1536;
-                _bitmap.DecodePixelHeight = 0;
-            }
-            else
-            {
-                _bitmap.DecodePixelWidth = 0;
-                _bitmap.DecodePixelHeight = 1536;
-            }
+                image.Position = 0;
+                image.CopyTo(memoryStream);
 
-            image.Position = 0;
+                try
+                {
+                    // Some streams do not support flushing
 
-            _bitmap.SetSource(image);
+                    image.Flush();
+                }
+                catch (Exception ex)
+                {
+                }
+
+                memoryStream.Position = 0;
+
+                // Initialize image source
+
+                _source = new StreamImageSource(memoryStream);
+
+                // Get image info
+
+                Task.Run(async () => { _info = await _source.GetInfoAsync(); }).Wait();
+
+                // Set _lowResolutionBitmap decoding to a quite low resolution and initialize it with image
+                if (_info.ImageSize.Width >= _info.ImageSize.Height)
+                {
+                    _bitmap.DecodePixelWidth = 1536;
+                    _bitmap.DecodePixelHeight = 0;
+                }
+                else
+                {
+                    _bitmap.DecodePixelWidth = 0;
+                    _bitmap.DecodePixelHeight = 1536;
+                }
+
+                image.Position = 0;
+
+                _bitmap.SetSource(image);
+            }
         }
 
         private void EndSession()
