@@ -251,15 +251,22 @@ namespace MagnifierApp.Pages
                         {
                             if (picture.GetPath() == photo.LibraryPath)
                             {
-                                PhotoModel.Singleton.FromLibraryImage(photo.LibraryPath, picture.GetImage());
+                                try
+                                {
+                                    PhotoModel.Singleton.FromLibraryImage(photo.LibraryPath, picture.GetImage());
 
-                                if (_picker)
-                                {
-                                    NavigationService.GoBack();
+                                    if (_picker)
+                                    {
+                                        NavigationService.GoBack();
+                                    }
+                                    else
+                                    {
+                                        NavigationService.Navigate(new Uri("/Pages/MagnifierPage.xaml", UriKind.Relative));
+                                    }
                                 }
-                                else
+                                catch (Exception ex)
                                 {
-                                    NavigationService.Navigate(new Uri("/Pages/MagnifierPage.xaml", UriKind.Relative));
+                                    System.Diagnostics.Debug.WriteLine("Unable to initialize from library image: " + ex.Message);
                                 }
                             }
                         }
