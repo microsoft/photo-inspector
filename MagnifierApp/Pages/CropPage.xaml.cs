@@ -103,11 +103,14 @@ namespace MagnifierApp.Pages
             var topLeftFoundationPoint = new Windows.Foundation.Point(Math.Round(topLeftWindowsPoint.X), Math.Round(topLeftWindowsPoint.Y));
             var bottomRightFoundationPoint = new Windows.Foundation.Point(Math.Round(bottomRightWindowsPoint.X), Math.Round(bottomRightWindowsPoint.Y));
 
-            var cropFilter = new CropFilter(new Windows.Foundation.Rect(topLeftFoundationPoint, bottomRightFoundationPoint));
+            var reframingFilter = new ReframingFilter()
+            {
+                ReframingArea = new Windows.Foundation.Rect(topLeftFoundationPoint, bottomRightFoundationPoint)
+            };
 
             var filterEffect = new FilterEffect(_source)
             {
-                Filters = new List<IFilter>() { cropFilter }
+                Filters = new List<IFilter>() { reframingFilter }
             };
 
             var renderer = new JpegRenderer(filterEffect)
