@@ -46,7 +46,7 @@ namespace MagnifierApp
         private StreamImageSource _source = null;
         private ImageProviderInfo _info = null;
         private WriteableBitmapRenderer _renderer = null;
-        private CropFilter _cropFilter = null;
+        private ReframingFilter _reframingFilter = null;
         private FilterEffect _filterEffect = null;
 
         public MagnifierPage()
@@ -307,11 +307,11 @@ namespace MagnifierApp
 
                 // Create crop filter effect
 
-                _cropFilter = new CropFilter();
+                _reframingFilter = new ReframingFilter();
 
                 _filterEffect = new FilterEffect(_source)
                 {
-                    Filters = new List<IFilter>() { _cropFilter }
+                    Filters = new List<IFilter>() { _reframingFilter }
                 };
 
                 // Create renderer
@@ -365,7 +365,7 @@ namespace MagnifierApp
                 _source = null;
             }
 
-            _cropFilter = null;
+            _reframingFilter = null;
             _info = null;
         }
 
@@ -609,7 +609,7 @@ namespace MagnifierApp
                     var topLeft = new Windows.Foundation.Point(topLeftX, topLeftY);
                     var bottomRight = new Windows.Foundation.Point(bottomRightX, bottomRightY);
 
-                    _cropFilter.CropArea = new Windows.Foundation.Rect(topLeft, bottomRight);
+                    _reframingFilter.ReframingArea = new Windows.Foundation.Rect(topLeft, bottomRight);
 
                     await _renderer.RenderAsync();
                 }
