@@ -12,8 +12,10 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Nokia.Graphics.Imaging;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -21,6 +23,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using Windows.Storage.Streams;
 
 namespace MagnifierApp.Pages
 {
@@ -33,7 +36,9 @@ namespace MagnifierApp.Pages
         private double _scale = 1.0;
         private bool _pinching = false;
         private Point _relativeCenter;
-        private EditingSession _session = null;
+
+        private StreamImageSource _source = null;
+        private ImageProviderInfo _info = null;
 
         #endregion Members
 
@@ -98,16 +103,28 @@ namespace MagnifierApp.Pages
             var topLeftFoundationPoint = new Windows.Foundation.Point(Math.Round(topLeftWindowsPoint.X), Math.Round(topLeftWindowsPoint.Y));
             var bottomRightFoundationPoint = new Windows.Foundation.Point(Math.Round(bottomRightWindowsPoint.X), Math.Round(bottomRightWindowsPoint.Y));
 
-            _session.AddFilter(FilterFactory.CreateCropFilter(new Windows.Foundation.Rect(topLeftFoundationPoint, bottomRightFoundationPoint)));
+            var reframingFilter = new ReframingFilter()
+            {
+                ReframingArea = new Windows.Foundation.Rect(topLeftFoundationPoint, bottomRightFoundationPoint)
+            };
 
-            var size = new Windows.Foundation.Size(bottomRightFoundationPoint.X - topLeftFoundationPoint.X, bottomRightFoundationPoint.Y - topLeftFoundationPoint.Y);
-            var task = _session.RenderToJpegAsync(size, OutputOption.PreserveAspectRatio, 1.0, OutputColorSpacing.Yuv420).AsTask();
+            var filterEffect = new FilterEffect(_source)
+            {
+                Filters = new List<IFilter>() { reframingFilter }
+            };
 
-            task.Wait();
+            var renderer = new JpegRenderer(filterEffect)
+            {
+                OutputOption = OutputOption.PreserveAspectRatio,
+                Quality = 1.0,
+                Size = new Windows.Foundation.Size(bottomRightFoundationPoint.X - topLeftFoundationPoint.X, bottomRightFoundationPoint.Y - topLeftFoundationPoint.Y)
+            };
 
-            _session.Undo();
+            IBuffer buffer = null;
 
-            PhotoModel.Singleton.FromNewCrop(task.Result.AsStream());
+            Task.Run(async () => { buffer = await renderer.RenderAsync(); }).Wait();
+
+            PhotoModel.Singleton.FromNewCrop(buffer.AsStream());
 
             NavigationService.GoBack();
         }
@@ -119,7 +136,7 @@ namespace MagnifierApp.Pages
 
         private void BeginSession(Stream image)
         {
-            // Initialize _session with image
+            // Initialize session with image
 
             using (var memoryStream = new MemoryStream())
             {
@@ -138,48 +155,56 @@ namespace MagnifierApp.Pages
 
                 memoryStream.Position = 0;
 
-                _session = new EditingSession(memoryStream.GetWindowsRuntimeBuffer());
-            }
+                // Initialize image source
 
-            // Set _lowResolutionBitmap decoding to a quite low resolution and initialize it with image
-            if (_session.Dimensions.Width >= _session.Dimensions.Height)
-            {
-                _bitmap.DecodePixelWidth = 1536;
-                _bitmap.DecodePixelHeight = 0;
-            }
-            else
-            {
-                _bitmap.DecodePixelWidth = 0;
-                _bitmap.DecodePixelHeight = 1536;
-            }
+                _source = new StreamImageSource(memoryStream);
 
-            image.Position = 0;
+                // Get image info
 
-            _bitmap.SetSource(image);
+                Task.Run(async () => { _info = await _source.GetInfoAsync(); }).Wait();
+
+                // Set _lowResolutionBitmap decoding to a quite low resolution and initialize it with image
+                if (_info.ImageSize.Width >= _info.ImageSize.Height)
+                {
+                    _bitmap.DecodePixelWidth = 1536;
+                    _bitmap.DecodePixelHeight = 0;
+                }
+                else
+                {
+                    _bitmap.DecodePixelWidth = 0;
+                    _bitmap.DecodePixelHeight = 1536;
+                }
+
+                image.Position = 0;
+
+                _bitmap.SetSource(image);
+            }
         }
 
         private void EndSession()
         {
-            if (_session != null)
+            if (_source != null)
             {
-                _session.Dispose();
-                _session = null;
+                _source.Dispose();
+                _source = null;
             }
+
+            _info = null;
         }
 
         private void ConfigureViewport()
         {
-            if (_session.Dimensions.Width < _session.Dimensions.Height)
+            if (_info.ImageSize.Width < _info.ImageSize.Height)
             {
-                _scale = Crop.Width / _session.Dimensions.Width;
+                _scale = Crop.Width / _info.ImageSize.Width;
             }
             else
             {
-                _scale = Crop.Height / _session.Dimensions.Height;
+                _scale = Crop.Height / _info.ImageSize.Height;
             }
 
-            Image.Width = _session.Dimensions.Width * _scale;
-            Image.Height = _session.Dimensions.Height * _scale;
+            Image.Width = _info.ImageSize.Width * _scale;
+            Image.Height = _info.ImageSize.Height * _scale;
             Image.Margin = new Thickness()
             {
                 Left = Math.Max(0, (ContentPanel.ActualWidth - Crop.Width) / 2),
@@ -221,14 +246,14 @@ namespace MagnifierApp.Pages
 
                 double w, h;
 
-                if (_session.Dimensions.Width < _session.Dimensions.Height)
+                if (_info.ImageSize.Width < _info.ImageSize.Height)
                 {
-                    w = _session.Dimensions.Width * _scale * e.PinchManipulation.CumulativeScale;
+                    w = _info.ImageSize.Width * _scale * e.PinchManipulation.CumulativeScale;
                     w = Math.Max(Crop.Width, w);
-                    w = Math.Min(w, _session.Dimensions.Width);
+                    w = Math.Min(w, _info.ImageSize.Width);
                     w = Math.Min(w, 4096);
 
-                    h = w * _session.Dimensions.Height / _session.Dimensions.Width;
+                    h = w * _info.ImageSize.Height / _info.ImageSize.Width;
 
                     if (h > 4096)
                     {
@@ -239,12 +264,12 @@ namespace MagnifierApp.Pages
                 }
                 else
                 {
-                    h = _session.Dimensions.Height * _scale * e.PinchManipulation.CumulativeScale;
+                    h = _info.ImageSize.Height * _scale * e.PinchManipulation.CumulativeScale;
                     h = Math.Max(Crop.Height, h);
-                    h = Math.Min(h, _session.Dimensions.Height);
+                    h = Math.Min(h, _info.ImageSize.Height);
                     h = Math.Min(h, 4096);
 
-                    w = h * _session.Dimensions.Width / _session.Dimensions.Height;
+                    w = h * _info.ImageSize.Width / _info.ImageSize.Height;
 
                     if (w > 4096)
                     {
@@ -265,7 +290,7 @@ namespace MagnifierApp.Pages
                 double x = _relativeCenter.X * w - p.X + Image.Margin.Left;
                 double y = _relativeCenter.Y * h - p.Y + Image.Margin.Top;
 
-                if (w < _session.Dimensions.Width && h < _session.Dimensions.Height)
+                if (w < _info.ImageSize.Width && h < _info.ImageSize.Height)
                 {
                     //System.Diagnostics.Debug.WriteLine("Viewport.ActualWidth={0} .ActualHeight={1} Origin.X={2} .Y={3} Image.Width={4} .Height={5}",
                     //    Viewport.ActualWidth, Viewport.ActualHeight, x, y, Image.Width, Image.Height);
@@ -295,8 +320,8 @@ namespace MagnifierApp.Pages
         {
             _pinching = false;
 
-            double sw = Image.Width / _session.Dimensions.Width;
-            double sh = Image.Height / _session.Dimensions.Height;
+            double sw = Image.Width / _info.ImageSize.Width;
+            double sh = Image.Height / _info.ImageSize.Height;
 
             _scale = Math.Min(sw, sh);
         }

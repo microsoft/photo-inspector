@@ -479,11 +479,13 @@ namespace MagnifierApp.Models
 
                 AutoResizeConfiguration resizeConfiguration = null;
 
-                using (var editingSession = new EditingSession(buffer))
+                using (var source = new BufferImageSource(buffer))
                 {
-                    if (editingSession.Dimensions.Width * editingSession.Dimensions.Height > LibraryMaxArea)
+                    var info = await source.GetInfoAsync();
+
+                    if (info.ImageSize.Width * info.ImageSize.Height > LibraryMaxArea)
                     {
-                        var compactedSize = CalculateSize(editingSession.Dimensions, LibraryMaxSize, LibraryMaxArea);
+                        var compactedSize = CalculateSize(info.ImageSize, LibraryMaxSize, LibraryMaxArea);
 
                         resizeConfiguration = new AutoResizeConfiguration(LibraryMaxBytes, compactedSize,
                             new Size(0, 0), AutoResizeMode.Automatic, 0, ColorSpace.Yuv420);

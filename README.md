@@ -134,6 +134,10 @@ Nokia Lumia 1020.
 8. Version history
 -------------------------------------------------------------------------------
 
+* 1.2: Third public release of Photo Inspector
+  - Updated to the latest Nokia Imaging SDK
+  - Now using Nuget Package Restore for external libraries
+
 * 1.1: Second public release of Photo Inspector
   - Photos can be cropped, and it's possible to either change the framing again or to revert to the original uncropped photo
   - New photo information page for displaying EXIF information
