@@ -74,11 +74,6 @@ Nokia Lumia 620, Nokia Lumia 520.
 
 Developed with Microsoft Visual Studio Express for Windows Phone 2012.
 
-4.1 Required Capabilities
--------------------------
-
-* `ID_CAP_ISV_CAMERA`
-* `ID_CAP_MEDIALIB_PHOTO`
 
 4.2 Known Issues
 ----------------
