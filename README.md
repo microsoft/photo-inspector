@@ -129,6 +129,9 @@ Nokia Lumia 1020.
 8. Version history
 -------------------------------------------------------------------------------
 
+* 1.3: Fourth public release of Photo Inspector
+  - Updated to the latest Nokia Imaging SDK version 1.1.177
+
 * 1.2: Third public release of Photo Inspector
   - Updated to the latest Nokia Imaging SDK
   - Now using Nuget Package Restore for external libraries

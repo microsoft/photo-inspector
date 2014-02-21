@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
   <DefaultLanguage xmlns="" code="en-US" />
-  <App xmlns="" ProductID="{082ec7b4-5761-4ea5-840c-a11e417f0553}" Title="Photo Inspector" RuntimeType="Silverlight" Version="1.2.0.0" Genre="apps.normal" Author="Nokia" Description="A Nokia example application demonstrating how to capture and process high resolution photos." Publisher="Nokia Developer" PublisherID="{6eda7135-8b6a-4a08-bac0-2fd117dce059}">
+  <App xmlns="" ProductID="{082ec7b4-5761-4ea5-840c-a11e417f0553}" Title="Photo Inspector" RuntimeType="Silverlight" Version="1.3.0.0" Genre="apps.normal" Author="Nokia" Description="A Nokia example application demonstrating how to capture and process high resolution photos." Publisher="Nokia Developer" PublisherID="{6eda7135-8b6a-4a08-bac0-2fd117dce059}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_ISV_CAMERA" />
