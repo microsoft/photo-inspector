@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
+  <Identity Name="c577b6be-d720-404c-94b2-59e41e44d73d" Publisher="CN=pekka" Version="2.0.0.0" />
+  <mp:PhoneIdentity PhoneProductId="082ec7b4-5761-4ea5-840c-a11e417f0553" PhonePublisherId="6eda7135-8b6a-4a08-bac0-2fd117dce059" />
+  <Properties>
+    <DisplayName>MagnifierApp</DisplayName>
+    <PublisherDisplayName>pekka</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+  <Prerequisites>
+    <OSMinVersion>6.3.1</OSMinVersion>
+    <OSMaxVersionTested>6.3.1</OSMaxVersionTested>
+  </Prerequisites>
+  <Resources>
+    <Resource Language="x-generate" />
+  </Resources>
+  <Applications>
+    <Application Id="x082ec7b4y5761y4ea5y840cya11e417f0553x" Executable="AGHost.exe" EntryPoint="Pages/PhotosPage.xaml">
+      <m3:VisualElements DisplayName="MagnifierApp" Square150x150Logo="Assets\SquareTile150x150.png" Square44x44Logo="Assets\Logo.png" Description="MagnifierApp" ForegroundText="light" BackgroundColor="#464646">
+        <m3:DefaultTile Square71x71Logo="Assets\SquareTile71x71.png">
+        </m3:DefaultTile>
+        <m3:SplashScreen Image="SplashScreenImage.jpg" />
+        <m3:ApplicationView MinWidth="width320" />
+        <!--Used in XAML Designer. DO NOT REMOVE-->
+      </m3:VisualElements>
+      <Extensions>
+        <Extension Category="windows.backgroundTasks" EntryPoint="AgHost.BackgroundTask">
+          <BackgroundTasks>
+            <Task Type="systemEvent" />
+          </BackgroundTasks>
+        </Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <Capability Name="picturesLibrary" />
+    <DeviceCapability Name="webcam" />
+  </Capabilities>
+  <Extensions>
+    <Extension Category="windows.activatableClass.inProcessServer">
+      <InProcessServer>
+        <Path>AgHostSvcs.dll</Path>
+        <ActivatableClass ActivatableClassId="AgHost.BackgroundTask" ThreadingModel="both" />
+      </InProcessServer>
+    </Extension>
+  </Extensions>
+</Package>

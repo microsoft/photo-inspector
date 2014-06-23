@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Deployment xmlns="http://schemas.microsoft.com/windowsphone/2014/deployment" AppPlatformVersion="8.1">
+  <DefaultLanguage xmlns="" code="en-US" />
+  <App xmlns="" ProductID="{082ec7b4-5761-4ea5-840c-a11e417f0553}" Title="Photo Inspector" RuntimeType="Silverlight" Version="2.0.0.0" Genre="apps.normal" Author="Nokia" Description="A Nokia example application demonstrating how to capture and process high resolution photos." Publisher="Nokia Developer" PublisherID="{6eda7135-8b6a-4a08-bac0-2fd117dce059}">
+    <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
+    <Capabilities>
+      <Capability Name="ID_CAP_ISV_CAMERA" />
+      <Capability Name="ID_CAP_MEDIALIB_PHOTO" />
+    </Capabilities>
+    <Tasks>
+      <DefaultTask Name="_default" NavigationPage="Pages/PhotosPage.xaml" />
+    </Tasks>
+    <Tokens>
+      <PrimaryToken TokenID="MagnifierAppToken" TaskName="_default">
+        <TemplateFlip>
+          <SmallImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileSmall.png</SmallImageURI>
+          <Count>0</Count>
+          <BackgroundImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileMedium.png</BackgroundImageURI>
+          <Title>Photo Inspector</Title>
+          <BackContent>
+          </BackContent>
+          <BackBackgroundImageURI IsRelative="true" IsResource="false">
+          </BackBackgroundImageURI>
+          <BackTitle>
+          </BackTitle>
+          <DeviceLockImageURI IsRelative="true" IsResource="false">
+          </DeviceLockImageURI>
+          <HasLarge>false</HasLarge>
+        </TemplateFlip>
+      </PrimaryToken>
+    </Tokens>
+    <Extensions>
+      <Extension ExtensionName="Photos_Extra_Hub" ConsumerID="{5B04B775-356B-4AA0-AAF8-6491FFEA5632}" TaskID="_default" />
+      <Extension ExtensionName="Photos_Extra_Image_Editor" ConsumerID="{5B04B775-356B-4AA0-AAF8-6491FFEA5632}" TaskID="_default" />
+      <Extension ExtensionName="Photos_Rich_Media_Edit" ConsumerID="{5B04B775-356B-4AA0-AAF8-6491FFEA5632}" TaskID="_default" />
+      <Extension ExtensionName="Camera_Capture_App" ConsumerID="{5B04B775-356B-4AA0-AAF8-6491FFEA5631}" TaskID="_default" />
+    </Extensions>
+    <ScreenResolutions>
+      <ScreenResolution Name="ID_RESOLUTION_WVGA" />
+      <ScreenResolution Name="ID_RESOLUTION_WXGA" />
+      <ScreenResolution Name="ID_RESOLUTION_HD720P" />
+    </ScreenResolutions>
+    <Requirements>
+      <Requirement Name="ID_REQ_REARCAMERA" />
+    </Requirements>
+  </App>
+</Deployment>
