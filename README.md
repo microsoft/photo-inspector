@@ -7,11 +7,11 @@ resolution photos (resolution depends on device hardware).
 Capture a photo and slide your finger on the preview to bring up a loupe to zoom
 right into pixel perfect details in the photo. Save a lower resolution copy of
 the photo to the main Photos gallery while retaining the original maximum
-resolution photo in application local storage for later use. Share photos as
-lower resolution copies to online services like Facebook and Twitter.
+resolution photo for later use. Share photos as lower resolution copies to 
+online services like Facebook and Twitter.
 
 The example has been developed with Silverlight for Windows Phone devices and
-tested to work on Nokia Lumia devices with Windows Phone 8.
+tested to work on Nokia Lumia devices with Windows Phone 8.1.
 
 This example application is hosted in GitHub:
 https://github.com/nokia-developer/photo-inspector
@@ -24,15 +24,15 @@ http://developer.nokia.com/Resources/Library/Lumia/#!imaging/working-with-high-r
 -------------------------------------------------------------------------------
 
 This is a simple build-and-run solution. See section 5 for instructions on how
-to run the application on your Windows Phone 8 device.
+to run the application on your Windows Phone 8.1 device.
 
 
 2. Prerequisites
 -------------------------------------------------------------------------------
 
 * C# basics
-* Windows 8
-* Microsoft Visual Studio Express for Windows Phone 2012
+* Windows 8.1
+* Microsoft Visual Studio Express for Windows Phone 2013
 
 
 3. Project structure and implementation
@@ -41,8 +41,11 @@ to run the application on your Windows Phone 8 device.
 3.1 Folders
 -----------
 
-* The root folder contains the project file, the license information and this
-  file.
+The root folder contains folders for Silverlight 8.1 and Silverlight 8.0 
+versions of the application, the license information and this file.
+
+Folders for both versions of the application contain:
+
 * `MagnifierApp`: Root folder for the implementation files.  
 * `Assets`: Graphic assets like icons and tiles.
 * `Pages`: Phone application pages.
@@ -56,10 +59,10 @@ to run the application on your Windows Phone 8 device.
 
 | File | Description |
 | ---- | ----------- |
-| `Models/PhotoModel.cs` | Saving and loading photos, current photo tombstoning, local storage handling. |
+| `Models/PhotoModel.cs` | Saving and loading photos, current photo tombstoning, storage handling. |
 | `Pages/ViewfinderPage.xaml(.cs)` | Simple viewfinder for capturing photos. |
 | `Pages/MagnifierPage.xaml(.cs)` | Photo preview and touch-to-zoom photo detail inspection loupe. |
-| `Pages/PhotosPage.xaml(.cs)` | Shows locally saved high resolution photos on high resolution capable devices. |
+| `Pages/PhotosPage.xaml(.cs)` | Shows photos available for magnifying and re-framing. |
 | `Pages/CropPage.xaml(.cs)` | Allows user to crop the photo. Pan & pinch zoom functionality. |
 | `Pages/InfoPage.xaml(.cs)` | Displays selected EXIF records for current photo. |
 
@@ -67,12 +70,12 @@ to run the application on your Windows Phone 8 device.
 4. Compatibility
 -------------------------------------------------------------------------------
 
-Application works on Windows Phone 8.
+Application works on Windows Phone 8.1. A separate version exists for Windows
+Phone 8.0.
 
-Tested to work on Nokia Lumia 1020, Nokia Lumia 925, Nokia Lumia 920,
-Nokia Lumia 620, Nokia Lumia 520.
+Tested to work on Nokia Lumia 1520 and Nokia Lumia 620
 
-Developed with Microsoft Visual Studio Express for Windows Phone 2012.
+Developed with Microsoft Visual Studio Express for Windows Phone 2013.
 
 
 4.2 Known Issues
@@ -89,8 +92,8 @@ None.
 
 Make sure you have the following installed:
 
-* Windows 8
-* Windows Phone SDK 8.0
+* Windows 8.1
+* Windows Phone SDK 8.1
 
 5.2 Using the WINDOWS PHONE 8 SDK
 ---------------------------------
@@ -128,6 +131,10 @@ Nokia Lumia 1020.
 
 8. Version history
 -------------------------------------------------------------------------------
+
+* 2.0: Project converted to Silverlight 8.1
+  - High resolution photos are saved to Camera Roll instead of local storage
+  - Photo grid shows all photos from Camera Roll
 
 * 1.3: Fourth public release of Photo Inspector
   - Updated to the latest Nokia Imaging SDK version 1.1.177
