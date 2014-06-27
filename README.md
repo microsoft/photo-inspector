@@ -124,7 +124,7 @@ https://github.com/nokia-developer/photo-inspector/blob/master/License.txt
 See http://developer.nokia.com/resources/library/Lumia/imaging/working-with-high-resolution-photos/photo-inspector.html 
 for more information on the project.
 
-See http://developer.nokia.com/Resources/Library/Lumia/#!imaging/working-with-high-resolution-photos.html
+See http://developer.nokia.com/resources/library/Lumia/imaging/working-with-high-resolution-photos.html
 for information on how to capture and handle high resolution photos for example on
 Nokia Lumia 1020.
 
