@@ -17,7 +17,7 @@ This example application is hosted in GitHub:
 https://github.com/nokia-developer/photo-inspector
 
 For more information on implementation, visit Nokia Lumia Developer's Library:
-http://developer.nokia.com/Resources/Library/Lumia/#!imaging/working-with-high-resolution-photos/photo-inspector.html
+http://developer.nokia.com/resources/library/Lumia/imaging/working-with-high-resolution-photos/photo-inspector.html
 
 
 1. Usage
@@ -73,7 +73,7 @@ Folders for both versions of the application contain:
 Application works on Windows Phone 8.1. A separate version exists for Windows
 Phone 8.0.
 
-Tested to work on Nokia Lumia 1520 and Nokia Lumia 620
+Tested to work on Nokia Lumia 1520 and Nokia Lumia 630
 
 Developed with Microsoft Visual Studio Express for Windows Phone 2013.
 
@@ -121,7 +121,7 @@ https://github.com/nokia-developer/photo-inspector/blob/master/License.txt
 7. Related documentation
 -------------------------------------------------------------------------------
 
-See http://developer.nokia.com/Resources/Library/Lumia/#!imaging/working-with-high-resolution-photos/photo-inspector.html 
+See http://developer.nokia.com/resources/library/Lumia/imaging/working-with-high-resolution-photos/photo-inspector.html 
 for more information on the project.
 
 See http://developer.nokia.com/Resources/Library/Lumia/#!imaging/working-with-high-resolution-photos.html
@@ -135,6 +135,7 @@ Nokia Lumia 1020.
 * 2.0: Project converted to Silverlight 8.1
   - High resolution photos are saved to Camera Roll instead of local storage
   - Photo grid shows all photos from Camera Roll
+  - Updated to the latest Nokia Imaging SDK version 1.2.151
 
 * 1.3: Fourth public release of Photo Inspector
   - Updated to the latest Nokia Imaging SDK version 1.1.177
