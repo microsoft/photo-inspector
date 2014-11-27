@@ -14,7 +14,7 @@ The example has been developed with Silverlight for Windows Phone devices and
 tested to work on Nokia Lumia devices with Windows Phone 8.1.
 
 This example application is hosted in GitHub:
-https://github.com/nokia-developer/photo-inspector
+https://github.com/Microsoft/photo-inspector
 
 For more information on implementation, visit Nokia Lumia Developer's Library:
 http://developer.nokia.com/resources/library/Lumia/imaging/working-with-high-resolution-photos/photo-inspector.html
@@ -115,7 +115,7 @@ http://msdn.microsoft.com/library/windowsphone/develop/ff402565(v=vs.105).aspx
 -------------------------------------------------------------------------------
 
 See the license text file delivered with this project:
-https://github.com/nokia-developer/photo-inspector/blob/master/License.txt
+https://github.com/Microsoft/photo-inspector/blob/master/License.txt
 
 
 7. Related documentation

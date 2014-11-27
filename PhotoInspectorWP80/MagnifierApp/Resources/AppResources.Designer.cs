@@ -79,7 +79,7 @@ namespace MagnifierApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://projects.developer.nokia.com/.
+        ///   Looks up a localized string similar to https://github.com/Microsoft/photo-inspector/.
         /// </summary>
         public static string AboutPage_Hyperlink_Projects {
             get {

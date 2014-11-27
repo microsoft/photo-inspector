@@ -171,11 +171,11 @@
     <value>Photo Inspector is an example application on how to capture and process high resolution photos (resolution depends on device hardware).</value>
   </data>
   <data name="AboutPage_Hyperlink_Projects" xml:space="preserve">
-    <value>http://projects.developer.nokia.com/</value>
+    <value>https://github.com/Microsoft/photo-inspector/</value>
   </data>
   <data name="AboutPage_ProjectRun_Text" xml:space="preserve">
     <value>For more information and application source code go to {0}.</value>
-    <comment>{0} is link to Projects</comment>
+    <comment>{0} is link to the project</comment>
   </data>
   <data name="AboutPage_Title_Text" xml:space="preserve">
     <value>about</value>
