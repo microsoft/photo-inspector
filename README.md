@@ -11,12 +11,12 @@ resolution photo for later use. Share photos as lower resolution copies to
 online services like Facebook and Twitter.
 
 The example has been developed with Silverlight for Windows Phone devices and
-tested to work on Nokia Lumia devices with Windows Phone 8.1.
+tested to work on Lumia devices with Windows Phone 8.1.
 
 This example application is hosted in GitHub:
 https://github.com/Microsoft/photo-inspector
 
-For more information on implementation, visit Nokia Lumia Developer's Library:
+For more information on implementation, visit Lumia Developer's Library:
 http://developer.nokia.com/resources/library/Lumia/imaging/working-with-high-resolution-photos/photo-inspector.html
 
 
